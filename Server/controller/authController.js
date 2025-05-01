@@ -1,4 +1,5 @@
-import User from "../model/user";
+import User from "../model/user.js";
+import bcrypt from "bcrypt"; // Make sure bcrypt is installed
 import jwt from "jsonwebtoken";
 
 /**
@@ -29,5 +30,55 @@ export async function register(req, res) {
   } catch (error) {
     console.error("Registration error:", error);
     res.status(500).json({ message: "Internal server error." });
+  }
+}
+
+export async function login(req, res) {
+  try {
+    const { email, password } = req.body;
+
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({
+        status: "false",
+        message: "Email and password are required.",
+      });
+    }
+
+    // Check if user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({
+        status: "false",
+        message: "Invalid credentials.",
+      });
+    }
+
+    // Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({
+        status: "false",
+        message: "Invalid credentials.",
+      });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    res.status(200).json({
+      status: "success",
+      message: "Login successful.",
+      user,
+      token,
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({
+      status: "false",
+      message: "Internal server error.",
+    });
   }
 }
