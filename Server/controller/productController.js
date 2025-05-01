@@ -13,11 +13,9 @@ export async function createProduct(req, res) {
       !Array.isArray(variants) ||
       variants.length === 0
     ) {
-      return res
-        .status(400)
-        .json({
-          message: "Product name and at least one variant are required.",
-        });
+      return res.status(400).json({
+        message: "Product name and at least one variant are required.",
+      });
     }
 
     const newProduct = new Product({
@@ -31,11 +29,36 @@ export async function createProduct(req, res) {
     const savedProduct = await newProduct.save();
 
     res.status(201).json({
-      message: "Product created successfully.",
+      status: true,
       product: savedProduct,
     });
   } catch (error) {
     console.error("Create Product Error:", error);
     res.status(500).json({ message: "Internal server error." });
+  }
+}
+
+
+export async function deleteProduct(req, res) {
+  try {
+    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+
+    if (!deletedProduct) {
+      return res.status(400).json({
+        status: false,
+        message: "No product found with this ID",
+      });
+    }
+
+    res.status(200).json({
+      status: true,
+      message: "Product deleted successfully",
+      deletedProduct, // optional: useful for frontend
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: error.message || "Internal server error",
+    });
   }
 }
