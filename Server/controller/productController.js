@@ -1,0 +1,41 @@
+import Product from "../model/product";
+
+/**
+ * Create a new product with color variants
+ */
+export async function createProduct(req, res) {
+  try {
+    const { name, description, basePrice, category, variants } = req.body;
+
+    if (
+      !name ||
+      !variants ||
+      !Array.isArray(variants) ||
+      variants.length === 0
+    ) {
+      return res
+        .status(400)
+        .json({
+          message: "Product name and at least one variant are required.",
+        });
+    }
+
+    const newProduct = new Product({
+      name,
+      description,
+      basePrice,
+      category,
+      variants,
+    });
+
+    const savedProduct = await newProduct.save();
+
+    res.status(201).json({
+      message: "Product created successfully.",
+      product: savedProduct,
+    });
+  } catch (error) {
+    console.error("Create Product Error:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+}
