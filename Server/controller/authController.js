@@ -1,5 +1,5 @@
 import User from "../model/user.js";
-import bcrypt from "bcrypt"; // Make sure bcrypt is installed
+import bcrypt from "bcryptjs"; // Make sure bcrypt is installed
 import jwt from "jsonwebtoken";
 
 /**
