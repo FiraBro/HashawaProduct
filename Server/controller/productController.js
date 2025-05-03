@@ -1,4 +1,4 @@
-import Product from "../model/product";
+import Product from "../model/product.js";
 
 /**
  * Create a new product with color variants
