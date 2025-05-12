@@ -3,10 +3,11 @@ import {
   createProduct,
   deleteProduct,
 } from "../controller/productController.js";
+import { Protect, restrictTo } from "../controller/authController.js";
 
 const productRoute = express.Router();
 
-productRoute.post("/", createProduct);
-productRoute.delete("/:id", deleteProduct); // if you want to expose delete as well
+productRoute.post("/", Protect, createProduct);
+productRoute.delete("/:id", Protect, restrictTo, deleteProduct);
 
 export default productRoute;
