@@ -5,17 +5,40 @@ import Product from "../model/product.js";
  */
 export async function createProduct(req, res) {
   try {
-    const { name, description, basePrice, category, variants } = req.body;
+    const { name, description, basePrice, category } = req.body;
 
-    if (
-      !name ||
-      !variants ||
-      !Array.isArray(variants) ||
-      variants.length === 0
+    const variants = [];
+
+    let index = 0;
+    while (
+      req.files[`variant${index}_front`] ||
+      req.files[`variant${index}_side`] ||
+      req.files[`variant${index}_back`]
     ) {
-      return res.status(400).json({
-        message: "Product name and at least one variant are required.",
+      const front = req.files[`variant${index}_front`]?.[0]?.filename;
+      const side = req.files[`variant${index}_side`]?.[0]?.filename;
+      const back = req.files[`variant${index}_back`]?.[0]?.filename;
+
+      if (!front || !side || !back) {
+        return res
+          .status(400)
+          .json({
+            message: `Variant ${index} must have front, side, and back images.`,
+          });
+      }
+
+      variants.push({
+        color: req.body[`variant${index}_color`] || "Default",
+        images: {
+          front,
+          side,
+          back,
+        },
+        stock: parseInt(req.body[`variant${index}_stock`] || "0"),
+        price: parseFloat(req.body[`variant${index}_price`] || basePrice),
       });
+
+      index++;
     }
 
     const newProduct = new Product({
@@ -27,17 +50,12 @@ export async function createProduct(req, res) {
     });
 
     const savedProduct = await newProduct.save();
-
-    res.status(201).json({
-      status: true,
-      product: savedProduct,
-    });
+    res.status(201).json({ status: true, product: savedProduct });
   } catch (error) {
     console.error("Create Product Error:", error);
     res.status(500).json({ message: "Internal server error." });
   }
 }
-
 
 export async function deleteProduct(req, res) {
   try {
