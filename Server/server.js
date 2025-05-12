@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import productRoute from "./route/product.js";
 import userRoute from "./route/user.js";
+import cartRouter from "./route/cart.js";
 // Load environment variables
 dotenv.config();
 
@@ -21,6 +22,7 @@ mongoose
 
 app.use("/api/v3/product", productRoute);
 app.use("/api/v3/user", userRoute);
+app.use("/api/v3/cart", cartRouter);
 
 const port = process.env.PORT || 4000;
 
