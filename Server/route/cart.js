@@ -3,7 +3,7 @@ const cartRouter = express.Router();
 import {
   addToCart,
   removeFromCart,
-  getCart,
+  getCart
 } from "../controller/cartController.js";
 import { Protect } from "../controller/authController.js";
 cartRouter.post("/add", Protect, addToCart);
