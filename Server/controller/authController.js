@@ -100,3 +100,15 @@ export async function Protect(req, res, next) {
     return res.status(403).json({ message: "Invalid or expired token" });
   }
 }
+
+export async function restrictTo(...allowedRole) {
+  return (req, res, next) => {
+    if (!allowedRole.includes(req.user.role)) {
+      res.status(403).json({
+        status: "success",
+        message: "You are nit allowed please try again later!",
+      });
+    }
+    next();
+  };
+}
