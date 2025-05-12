@@ -1,9 +1,9 @@
-import Order from "../models/Order.js";
-import Cart from "../models/Cart.js";
+import Order from "../model/Order.js";
+import Cart from "../model/cart.js";
 
 // 📦 Place order from cart
 export const placeOrder = async (req, res) => {
-  const userId = req.user._id;
+  const userId = req.user.id;
 
   const cart = await Cart.findOne({ user: userId }).populate("items.product");
   if (!cart || cart.items.length === 0) {
