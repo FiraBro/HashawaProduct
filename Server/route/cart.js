@@ -4,8 +4,10 @@ import {
   addToCart,
   removeFromCart,
   getCart,
-} from "../controller/cartController";
-import { Protect } from "../controller/authController";
+} from "../controller/cartController.js";
+import { Protect } from "../controller/authController.js";
 cartRouter.post("/add", Protect, addToCart);
 cartRouter.post("/remove", Protect, removeFromCart);
 cartRouter.get("/get", Protect, getCart);
+
+export default cartRouter;
