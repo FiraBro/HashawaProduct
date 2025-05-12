@@ -1,9 +1,23 @@
 import Cart from "../model/cart.js";
-// Add item to cart
+import Product from "../model/product.js";
+
+/**
+ * Add item to cart
+ */
 export async function addToCart(req, res) {
   try {
-    const userId = req.user.id;
-    const { productId, quantity = 1 } = req.body;
+    const { productId, variantColor, quantity } = req.body;
+    const userId = req.user.id; // assuming user is authenticated
+
+    if (!productId || !variantColor || !quantity) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const product = await Product.findById(productId);
+    if (!product) return res.status(404).json({ message: "Product not found" });
+
+    const variant = product.variants.find((v) => v.color === variantColor);
+    if (!variant) return res.status(404).json({ message: "Variant not found" });
 
     let cart = await Cart.findOne({ user: userId });
 
@@ -11,51 +25,52 @@ export async function addToCart(req, res) {
       cart = new Cart({ user: userId, items: [] });
     }
 
-    const existingItemIndex = cart.items.findIndex(
-      (item) => item.product.toString() === productId
+    const existingItem = cart.items.find(
+      (item) =>
+        item.product.toString() === productId &&
+        item.variantColor === variantColor
     );
 
-    if (existingItemIndex !== -1) {
-      // If item exists, update quantity
-      cart.items[existingItemIndex].quantity += quantity;
+    if (existingItem) {
+      existingItem.quantity += quantity;
     } else {
-      // Otherwise, add new item
-      cart.items.push({ product: productId, quantity });
+      cart.items.push({ product: productId, variantColor, quantity });
     }
 
     await cart.save();
     res.status(200).json({ message: "Item added to cart", cart });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Error adding to cart", error: err.message });
+    console.error("Add to cart error:", err);
+    res.status(500).json({ message: "Internal server error" });
   }
 }
 
-// Remove item from cart
+/**
+ * Remove item from cart
+ */
 export async function removeFromCart(req, res) {
   try {
+    const { productId, variantColor } = req.body;
     const userId = req.user.id;
-    const { productId } = req.body;
 
     const cart = await Cart.findOne({ user: userId });
-
     if (!cart) return res.status(404).json({ message: "Cart not found" });
 
     cart.items = cart.items.filter(
-      (item) => item.product.toString() !== productId
+      (item) =>
+        !(
+          item.product.toString() === productId &&
+          item.variantColor === variantColor
+        )
     );
 
     await cart.save();
-    res.status(200).json({ message: "Item removed from cart", cart });
+    res.status(200).json({ message: "Item removed", cart });
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Error removing from cart", error: err.message });
+    console.error("Remove from cart error:", err);
+    res.status(500).json({ message: "Internal server error" });
   }
 }
-
-// Get cart
 export async function getCart(req, res) {
   try {
     const userId = req.user.id;
