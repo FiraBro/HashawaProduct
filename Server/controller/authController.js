@@ -25,7 +25,7 @@ export async function register(req, res) {
     // Create new user
     const newUser = new User({ name, email, password });
     await newUser.save();
-    const token = jwt.sign(newUser._id, process.env.SECRET);
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
     res.status(201).json({ status: "false", user: newUser, token });
   } catch (error) {
     console.error("Registration error:", error);
