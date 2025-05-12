@@ -1,7 +1,4 @@
-// controllers/cartController.js
-const Cart = require("../models/cartModel"); // Assuming you have a Cart model
-const Product = require("../models/productModel"); // Optional: if you want to validate product exists
-
+import Cart from "../model/cart.js";
 // Add item to cart
 export async function addToCart(req, res) {
   try {
