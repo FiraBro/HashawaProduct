@@ -20,11 +20,9 @@ export async function createProduct(req, res) {
       const back = req.files[`variant${index}_back`]?.[0]?.filename;
 
       if (!front || !side || !back) {
-        return res
-          .status(400)
-          .json({
-            message: `Variant ${index} must have front, side, and back images.`,
-          });
+        return res.status(400).json({
+          message: `Variant ${index} must have front, side, and back images.`,
+        });
       }
 
       variants.push({
@@ -77,6 +75,23 @@ export async function deleteProduct(req, res) {
     res.status(500).json({
       status: false,
       message: error.message || "Internal server error",
+    });
+  }
+}
+
+export async function getAllProduct(req, res, next) {
+  try {
+    const product = await Product.find();
+    res.status(200).json({
+      status: "success",
+      data: {
+        product,
+      },
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: "fail",
+      message: error.message,
     });
   }
 }
