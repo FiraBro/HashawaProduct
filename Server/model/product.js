@@ -10,8 +10,12 @@ const productSchema = new mongoose.Schema(
     variants: [
       {
         color: { type: String, required: true },
-        images: [String],
-        stock: Number,
+        images: {
+          front: { type: String, required: true },
+          side: { type: String, required: true },
+          back: { type: String, required: true },
+        },
+        stock: { type: Number, default: 0 },
         price: Number, // optional override
       },
     ],
