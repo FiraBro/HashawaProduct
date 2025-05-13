@@ -372,7 +372,6 @@ body {
                 e.preventDefault(); // Prevent the default link behavior
                 return;
             }
-            
             sessionStorage.setItem('checkoutTotal', total);
             // No alert needed, the link will handle the redirection
         });
@@ -386,7 +385,6 @@ body {
             const cartSummary = document.getElementById('cart-summary');
             const emptyCartMessage = document.getElementById('empty-cart-message');
             const cartTotalElement = document.getElementById('cart-total');
-            
             cartItemsContainer.innerHTML = '';
             
             if (this.cart.length === 0) {
