@@ -1,0 +1,66 @@
+.footer {
+  background: #2d3436;
+  color: #f5f6fa;
+  padding: 40px 0 0 0;
+}
+
+.footerContainer {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #23272b;
+  border-radius: 10px;
+  padding: 25px 20px;
+  flex: 1 1 220px;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card h1 {
+  color: #41cfe8;
+  font-size: 1.3rem;
+  margin-bottom: 15px;
+}
+
+.card form input,
+.card form textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1rem;
+  background: #f5f6fa;
+  color: #2d3436;
+}
+
+.card form button {
+  background: #00a8ff;
+  color: #fff;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.card form button:hover {
+  background: #0095e0;
+}
+
+.footerBottom {
+  text-align: center;
+  padding: 20px 0;
+  background: #23272b;
+  color: #b2bec3;
+  font-size: 0.95rem;
+}
