@@ -69,3 +69,4 @@ export const updateOrderStatus = async (req, res) => {
 
   res.json({ message: "Order status updated", order });
 };
+
