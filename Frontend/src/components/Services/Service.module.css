@@ -1,0 +1,42 @@
+.services {
+  padding: 40px 0;
+  background: #f8fafd;
+  text-align: center;
+}
+
+.services h1 {
+  color: #00a8ff;
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.serviceContainer {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.serviceBox {
+  background: white;
+  border-radius: 10px;
+  padding: 30px 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  flex: 1 1 220px;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.25s;
+}
+
+.serviceBox:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(124, 236, 242, 0.2), 0 8px 12px rgba(124, 236, 242, 0.1);
+}
+
+.serviceBox svg {
+  color: #41cfe8;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
