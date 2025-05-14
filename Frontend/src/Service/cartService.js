@@ -3,7 +3,7 @@
 import axios from 'axios';
 import { authService } from './authService';
 
-const API_URL = 'http://localhost:5000/api/cart';
+const API_URL = 'http://localhost:3000/api/cart';
 
 export const cartService = {
   addToCart: async ({ productId, variantColor, quantity }) => {

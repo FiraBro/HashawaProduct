@@ -2,7 +2,7 @@
 import axios from "axios";
 import { authService } from "./authService";
 
-const API_URL = "http://localhost:5000/api/orders";
+const API_URL = "http://localhost:3000/api/orders";
 
 export const orderService = {
   placeOrder: async (address) => {

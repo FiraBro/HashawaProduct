@@ -6,7 +6,7 @@ const Hero = () => (
     <div className={styles.heroContent}>
       <div
         className={styles.contentBg}
-        style={{ backgroundImage: "url('shoe.jpg')" }}
+        style={{ backgroundImage: "url('/shoe.jpg')" }}
       ></div>
       <div className={styles.contentText}>
         <h1>Welcome to Abdihope Shoe Store</h1>

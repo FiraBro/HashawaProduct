@@ -17,7 +17,7 @@ const About = () => {
       <div className={styles.aboutContent}>
         <div className={styles.colorOptions}>
           <div onMouseOver={() => handleHover("Classic Red", "shoe.jpg")}>
-            <img src="shoe-red-thumbnail.jpg" alt="Red" />
+            <img src="shoe.jpg" alt="Red" />
             <div>Classic Red</div>
           </div>
           <div onMouseOver={() => handleHover("Navy Blue", "shoe.jpg")}>

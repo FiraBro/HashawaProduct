@@ -1,4 +1,4 @@
-.footer {
+/* .footer {
   background: #2d3436;
   color: #f5f6fa;
   padding: 40px 0 0 0;
@@ -63,4 +63,122 @@
   background: #23272b;
   color: #b2bec3;
   font-size: 0.95rem;
+} */
+
+/* Footer.module.css */
+
+.footer {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 2rem 0 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.footerContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.card {
+  background-color: #34495e;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #f1c40f;
+  border-bottom: 2px solid #f1c40f;
+  padding-bottom: 0.5rem;
+}
+
+.card p {
+  margin: 0.8rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card input,
+.card textarea {
+  padding: 0.8rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #ecf0f1;
+  font-size: 1rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.card input:focus,
+.card textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.3);
+}
+
+.card textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.card button {
+  background-color: #f1c40f;
+  color: #2c3e50;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.card button:hover {
+  background-color: #f39c12;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+.footerBottom {
+  text-align: center;
+  padding: 1.5rem 0;
+  margin-top: 2rem;
+  background-color: #1a252f;
+  font-size: 0.9rem;
+}
+
+.footerBottom p {
+  margin: 0.5rem 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .footerContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    margin: 0 1rem;
+  }
 }
