@@ -1,184 +1,134 @@
-/* .footer {
-  background: #2d3436;
-  color: #f5f6fa;
-  padding: 40px 0 0 0;
+
+.footer {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  padding: 2rem 0 0;
+  font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
 .footerContainer {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  flex-wrap: wrap;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
 }
 
-.card {
-  background: #23272b;
-  border-radius: 10px;
-  padding: 25px 20px;
-  flex: 1 1 220px;
-  max-width: 340px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.footerSection {
+  margin-bottom: 2rem;
 }
 
-.card h1 {
-  color: #41cfe8;
-  font-size: 1.3rem;
-  margin-bottom: 15px;
+.footerHeading {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-.card form input,
-.card form textarea {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 8px 10px;
-  border-radius: 6px;
-  border: none;
-  font-size: 1rem;
-  background: #f5f6fa;
-  color: #2d3436;
+.footerList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.card form button {
-  background: #00a8ff;
-  color: #fff;
-  border: none;
-  padding: 8px 24px;
-  border-radius: 25px;
-  font-weight: 600;
+.footerList li {
+  margin-bottom: 0.8rem;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: color 0.2s;
 }
 
-.card form button:hover {
-  background: #0095e0;
+.footerList li:hover {
+  color: #cccccc;
+}
+
+.socialIcons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.icon {
+  background-color: #333;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.icon:hover {
+  background-color: #555;
+}
+
+.newsletter p {
+  margin-bottom: 0.8rem;
+}
+
+.newsletterForm {
+  display: flex;
+}
+
+.newsletterForm input {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px 0 0 4px;
+  flex-grow: 1;
+}
+
+.newsletterForm button {
+  padding: 0.5rem 1rem;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.newsletterForm button:hover {
+  background-color: #ff5252;
 }
 
 .footerBottom {
+  border-top: 1px solid #333;
+  padding: 1rem;
   text-align: center;
-  padding: 20px 0;
-  background: #23272b;
-  color: #b2bec3;
-  font-size: 0.95rem;
-} */
-
-/* Footer.module.css */
-
-.footer {
-  background-color: #2c3e50;
-  color: #ecf0f1;
-  padding: 2rem 0 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.footerContainer {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-}
-
-.card {
-  background-color: #34495e;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-}
-
-.card h1 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: #f1c40f;
-  border-bottom: 2px solid #f1c40f;
-  padding-bottom: 0.5rem;
-}
-
-.card p {
-  margin: 0.8rem 0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.card form {
+  font-size: 0.9rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1rem;
 }
 
-.card input,
-.card textarea {
-  padding: 0.8rem;
-  border: none;
-  border-radius: 4px;
-  background-color: #ecf0f1;
-  font-size: 1rem;
-  transition: box-shadow 0.3s ease;
+.legalLinks {
+  display: flex;
+  gap: 1.5rem;
 }
 
-.card input:focus,
-.card textarea:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.3);
-}
-
-.card textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-.card button {
-  background-color: #f1c40f;
-  color: #2c3e50;
-  border: none;
-  padding: 0.8rem;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-weight: bold;
+.legalLinks span {
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: color 0.2s;
 }
 
-.card button:hover {
-  background-color: #f39c12;
+.legalLinks span:hover {
+  color: #cccccc;
 }
 
-.card img {
-  width: 100%;
-  height: auto;
-  border-radius: 4px;
-  margin-top: 0.5rem;
-}
-
-.footerBottom {
-  text-align: center;
-  padding: 1.5rem 0;
-  margin-top: 2rem;
-  background-color: #1a252f;
-  font-size: 0.9rem;
-}
-
-.footerBottom p {
-  margin: 0.5rem 0;
-}
-
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .footerContainer {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
-  .card {
-    margin: 0 1rem;
+  .footerBottom {
+    flex-direction: column;
+  }
+
+  .legalLinks {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }
