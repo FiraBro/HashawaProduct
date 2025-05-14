@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "./components/Header/Header";
+import Navbar from "./components/Navbar/Navbar";
 import Hero from "./components/Hero/Hero";
 import Products from "./components/Product/Product";
 import About from "./components/About/About";
@@ -11,7 +11,7 @@ import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 function App() {
   return (
     <div>
-      <Header />
+      <Navbar />
       <Hero />
       <Products />
       <About />
