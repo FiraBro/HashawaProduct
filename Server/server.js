@@ -1,15 +1,31 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
+import path from "path";
+
+// Import routes
 import productRoute from "./route/product.js";
 import userRoute from "./route/user.js";
 import cartRouter from "./route/cart.js";
 import orderRouter from "./route/order.js";
+import colorOptions from './route/colorRoutes.js';
+
 // Load environment variables
 dotenv.config();
 
 const app = express();
+
+// Enable CORS
+app.use(cors());
+
+// Middleware to parse JSON
 app.use(express.json());
+
+// Serve static files from the "uploads" folder
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
+// Connect to MongoDB
 mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
@@ -18,16 +34,18 @@ mongoose
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err);
-    process.exit(1); // Exit if DB connection fails
+    process.exit(1);
   });
 
+// Mount API routes
 app.use("/api/v3/product", productRoute);
 app.use("/api/v3/user", userRoute);
 app.use("/api/v3/cart", cartRouter);
 app.use("/api/v3/order", orderRouter);
+app.use('/api/colors', colorOptions);
 
+// Start server
 const port = process.env.PORT || 4000;
-
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`🚀 Server is running on port ${port}`);
 });
