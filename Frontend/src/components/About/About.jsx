@@ -21,7 +21,7 @@ const About = () => {
             <div>Classic Red</div>
           </div>
           <div onMouseOver={() => handleHover("Navy Blue", "shoe.jpg")}>
-            <img src="shoe.jpg" alt="Blue" />
+            <img src="/shoe.jpg" alt="Blue" />
             <div>Navy Blue</div>
           </div>
         </div>
