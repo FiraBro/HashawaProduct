@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "../Navbar/Navbar.module.css";
+import { Link } from "react-router-dom";
 import {
   FaShoppingCart,
   FaUser,
@@ -11,6 +12,7 @@ import {
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const isLoggedIn = localStorage.getItem("token");
 
   return (
     <header className={styles.header}>
@@ -58,60 +60,48 @@ const Navbar = () => {
             {/* Navigation Links */}
             <ul className={styles.navList}>
               <li className={styles.navItem}>
-                <a
-                  href="#home"
+                <Link
+                  to="/home"
                   className={styles.navLink}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Home
-                </a>
+                </Link>
               </li>
               <li className={styles.navItem}>
-                <a
-                  href="#products"
+                <Link
+                  to="/products"
                   className={styles.navLink}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Products
-                </a>
+                </Link>
               </li>
               <li className={styles.navItem}>
-                <a
-                  href="#service"
+                <Link
+                  to="/service"
                   className={styles.navLink}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Services
-                </a>
+                </Link>
               </li>
               <li className={styles.navItem}>
-                <a
-                  href="#about"
-                  className={styles.navLink}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  About
-                </a>
-              </li>
-              <li className={styles.navItem}>
-                <a
-                  href="#contact"
+                <Link
+                  to="/contact"
                   className={styles.navLink}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Contact
-                </a>
+                </Link>
               </li>
             </ul>
 
             {/* Mobile Account Links */}
-            <div className={styles.mobileAccount}>
-              <a href="#login" className={styles.accountLink}>
-                <FaUser /> Login/Sign Up
-              </a>
-              <a href="#track" className={styles.accountLink}>
+            <div className={styles.navItem}>
+              <Link to="/track" className={styles.navLink}>
                 Track Order
-              </a>
+              </Link>
             </div>
           </nav>
 
@@ -140,18 +130,33 @@ const Navbar = () => {
               </div>
             )}
 
-            {/* Account */}
-            <a href="#login" className={styles.iconButton}>
-              <FaUser />
-              <span className={styles.iconText}>Account</span>
-            </a>
+            {/* Account / Logout */}
+            {isLoggedIn ? (
+              <button
+                className={styles.iconButton}
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  window.location.reload(); // Or use navigate("/login") if using useNavigate
+                }}
+              >
+                <FaUser />
+                <span className={styles.iconText}>Logout</span>
+              </button>
+            ) : (
+              <Link to="/login" className={styles.iconButton}>
+                <FaUser />
+                <span className={styles.iconText}>Account</span>
+              </Link>
+            )}
 
-            {/* Cart */}
-            <a href="#cart" className={styles.cartIcon}>
-              <FaShoppingCart />
-              <span className={styles.cartCount}>0</span>
-              <span className={styles.iconText}>Cart</span>
-            </a>
+            {/* Cart - Show only if logged in */}
+            {isLoggedIn && (
+              <Link to="/cart" className={styles.cartIcon}>
+                <FaShoppingCart />
+                <span className={styles.cartCount}>0</span>
+                <span className={styles.iconText}>Cart</span>
+              </Link>
+            )}
 
             {/* Mobile Menu Toggle */}
             <button
