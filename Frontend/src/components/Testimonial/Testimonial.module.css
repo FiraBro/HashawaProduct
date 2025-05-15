@@ -1,0 +1,97 @@
+.testimonials {
+  padding: 3rem 0;
+  background: #f9f9f9;
+}
+
+.testimonials h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #333;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.card h4 {
+  margin: 0;
+  color: #333;
+}
+
+.card h5 {
+  margin: 0.5rem 0;
+  color: #222;
+  font-size: 1.1rem;
+}
+
+.card p {
+  color: #555;
+  line-height: 1.6;
+  margin: 0.5rem 0;
+}
+
+.rating {
+  color: #ffc107;
+  font-size: 1rem;
+  margin: 0.25rem 0;
+}
+
+.product {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  font-size: 0.9rem;
+}
+
+.product span {
+  color: #777;
+}
+
+.product img {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.product p {
+  margin: 0;
+  font-weight: 600;
+  color: #444;
+}

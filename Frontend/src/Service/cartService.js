@@ -3,7 +3,7 @@
 import axios from 'axios';
 import { authService } from './authService';
 
-const API_URL = 'http://localhost:3000/api/cart';
+const API_URL = 'http://localhost:3000/api/v3/cart';
 
 export const cartService = {
   addToCart: async ({ productId, variantColor, quantity }) => {
@@ -34,10 +34,11 @@ export const cartService = {
 
   getCart: async () => {
     try {
-      const response = await axios.get(`${API_URL}`, {
+      const response = await axios.get(`${API_URL}/get`, {
         headers: authService.authHeader(),
       });
-      return response.data.cart;
+      console.log(response)
+      return response;
     } catch (error) {
       throw error.response?.data || { message: 'Failed to fetch cart' };
     }

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../Navbar/Navbar.module.css";
+import { cartService } from "../../Service/cartService";
 import { Link } from "react-router-dom";
 import {
   FaShoppingCart,
@@ -12,7 +13,28 @@ import {
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
   const isLoggedIn = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      try {
+        if (!isLoggedIn) return;
+
+        const { data } = await cartService.getCart();
+        // Assuming structure: { cart: [{ quantity: 2 }, { quantity: 1 }] }
+        const totalItems = data.cart.items.reduce(
+          (acc, item) => acc + item.quantity,
+          0
+        );
+        setCartCount(totalItems);
+      } catch (error) {
+        console.error("Error fetching cart:", error);
+      }
+    };
+
+    fetchCart();
+  }, [isLoggedIn]);
 
   return (
     <header className={styles.header}>
@@ -36,7 +58,6 @@ const Navbar = () => {
               isMenuOpen ? styles.mobileNavActive : ""
             }`}
           >
-            {/* Mobile Menu Close Button */}
             <button
               className={styles.mobileMenuClose}
               onClick={() => setIsMenuOpen(false)}
@@ -97,7 +118,6 @@ const Navbar = () => {
               </li>
             </ul>
 
-            {/* Mobile Account Links */}
             <div className={styles.navItem}>
               <Link to="/track" className={styles.navLink}>
                 Track Order
@@ -107,7 +127,6 @@ const Navbar = () => {
 
           {/* Right Side Icons */}
           <div className={styles.navIcons}>
-            {/* Search Icon (Desktop) */}
             <button
               className={styles.iconButton}
               onClick={() => setSearchOpen(!searchOpen)}
@@ -116,7 +135,6 @@ const Navbar = () => {
               <FaSearch />
             </button>
 
-            {/* Search Bar (Desktop) - appears when searchOpen is true */}
             {searchOpen && (
               <div className={styles.desktopSearch}>
                 <input
@@ -136,7 +154,7 @@ const Navbar = () => {
                 className={styles.iconButton}
                 onClick={() => {
                   localStorage.removeItem("token");
-                  window.location.reload(); // Or use navigate("/login") if using useNavigate
+                  window.location.reload();
                 }}
               >
                 <FaUser />
@@ -149,11 +167,13 @@ const Navbar = () => {
               </Link>
             )}
 
-            {/* Cart - Show only if logged in */}
+            {/* Cart */}
             {isLoggedIn && (
               <Link to="/cart" className={styles.cartIcon}>
                 <FaShoppingCart />
-                <span className={styles.cartCount}>0</span>
+                {cartCount > 0 && (
+                  <span className={styles.cartCount}>{cartCount}</span>
+                )}
                 <span className={styles.iconText}>Cart</span>
               </Link>
             )}

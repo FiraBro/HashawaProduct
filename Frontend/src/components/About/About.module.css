@@ -1,4 +1,4 @@
-.about {
+/* .about {
   max-width: 1000px;
   padding: 15px;
   margin: 0 auto;
@@ -53,4 +53,253 @@
   object-fit: contain;
   border-radius: 10px;
   border: 2px solid #eee;
+} */
+
+
+
+
+.about {
+  padding: 5rem 2rem;
+  background-color: #f9f9f9;
 }
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.sectionTitle {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.sectionSubtitle {
+  font-size: 1rem;
+  color: #666;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.colorSelector {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.colorDisplay {
+  display: flex;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.mainImageContainer {
+  flex: 1;
+  min-width: 300px;
+  position: relative;
+}
+
+.mainImage {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.mainImage:hover {
+  transform: translateY(-5px);
+}
+
+.colorBadge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #333;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.colorInfo {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.colorName {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+.colorDescription {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.colorSwatches {
+  display: flex;
+  gap: 1rem;
+}
+
+.swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.swatch:hover {
+  transform: scale(1.1);
+}
+
+.swatch.active {
+  border-color: #222;
+  transform: scale(1.1);
+}
+
+.checkmark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+
+.colorOptions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.optionCard {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.optionCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.optionCard.activeCard {
+  border: 2px solid #4a90e2;
+}
+
+.optionImageContainer {
+  height: 180px;
+  overflow: hidden;
+}
+
+.optionImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.optionCard:hover .optionImage {
+  transform: scale(1.05);
+}
+
+.optionDetails {
+  padding: 1.2rem;
+}
+
+.optionDetails h4 {
+  margin: 0 0 0.8rem 0;
+  font-size: 1.1rem;
+  color: #222;
+}
+
+.colorSample {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #eee;
+}
+
+
+.loading,
+.error,
+.empty {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.error {
+  color: #e53935;
+}
+
+.loading:after {
+  content: "...";
+  animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+  0%,
+  20% {
+    content: ".";
+  }
+  40% {
+    content: "..";
+  }
+  60% {
+    content: "...";
+  }
+  80%,
+  100% {
+    content: "";
+  }
+}
+
+@media (max-width: 768px) {
+  .about {
+    padding: 3rem 1rem;
+  }
+
+  .colorDisplay {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .mainImageContainer,
+  .colorInfo {
+    min-width: 100%;
+  }
+
+  .colorOptions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .sectionTitle {
+    font-size: 1.8rem;
+  }
+
+  .colorOptions {
+    grid-template-columns: 1fr;
+  }
+} 
