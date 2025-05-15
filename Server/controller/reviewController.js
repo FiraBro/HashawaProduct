@@ -10,7 +10,7 @@ export const createReview = async (req, res) => {
     // Check if user already reviewed this product
     const existingReview = await Review.findOne({
       productId,
-      userId: req.user._id,
+      userId: req.user.id,
     });
 
     if (existingReview) {
@@ -22,7 +22,7 @@ export const createReview = async (req, res) => {
 
     const review = new Review({
       productId,
-      userId: req.user._id,
+      userId: req.user.id,
       rating,
       title,
       comment,
@@ -39,7 +39,7 @@ export const createReview = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Server Error",
+      message:error.message,
     });
   }
 };
