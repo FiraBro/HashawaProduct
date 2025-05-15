@@ -4,11 +4,11 @@ import {
   getProductReviews,
   getTestimonials,
 } from "../controller/reviewController.js";
-// import protect from "../controller/authController.js";
-
+import { Protect } from "../controller/authController.js";
 const reviewRouter = express.Router();
 
-reviewRouter.route("/").post(createReview);
+// ✅ Only protect routes that need authentication
+reviewRouter.route("/").post(Protect, createReview);
 
 reviewRouter.route("/testimonials").get(getTestimonials);
 
