@@ -3,8 +3,10 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import path from "path";
+const app = express();
 import morgan from "morgan";
 // Import routes
+app.use(morgan("dev"));
 import productRoute from "./route/product.js";
 import userRoute from "./route/user.js";
 import cartRouter from "./route/cart.js";
@@ -14,8 +16,6 @@ import reviewRouter from "./route/reviewRoutes.js";
 // Load environment variables
 dotenv.config();
 
-const app = express();
-app.use(morgan("dev"));
 // Enable CORS
 app.use(cors());
 

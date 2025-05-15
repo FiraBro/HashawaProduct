@@ -5,7 +5,7 @@ import {
   getAllProduct,
 } from "../controller/productController.js";
 import { Protect, restrictTo } from "../controller/authController.js";
-import { upload } from "../middleware/upload.js";
+import {upload}  from "../middleware/upload.js";
 
 const productRoute = express.Router();
 productRoute.get("/", getAllProduct);
