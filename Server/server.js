@@ -9,7 +9,7 @@ import productRoute from "./route/product.js";
 import userRoute from "./route/user.js";
 import cartRouter from "./route/cart.js";
 import orderRouter from "./route/order.js";
-import colorOptions from './route/colorRoutes.js';
+import reviewRouter from "./route/reviewRoutes.js";
 
 // Load environment variables
 dotenv.config();
@@ -42,7 +42,7 @@ app.use("/api/v3/product", productRoute);
 app.use("/api/v3/user", userRoute);
 app.use("/api/v3/cart", cartRouter);
 app.use("/api/v3/order", orderRouter);
-app.use('/api/colors', colorOptions);
+app.use('/review',reviewRouter)
 
 // Start server
 const port = process.env.PORT || 4000;
