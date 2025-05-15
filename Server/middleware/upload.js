@@ -24,6 +24,7 @@ export const upload = multer({
   storage,
   fileFilter,
 }).fields([
+  { name: "userImage", maxCount: 1 },
   { name: "variant0_front" },
   { name: "variant0_side" },
   { name: "variant0_back" },
