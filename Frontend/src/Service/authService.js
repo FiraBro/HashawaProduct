@@ -1,7 +1,7 @@
 // 📁 services/authService.js
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = "http://localhost:3000/api/v3/user";
 
 export const authService = {
   register: async ({ name, email, password }) => {
@@ -13,7 +13,7 @@ export const authService = {
       });
       return response.data;
     } catch (error) {
-      throw error.response?.data || { message: 'Registration failed' };
+      throw error.response?.data || { message: "Registration failed" };
     }
   },
 
@@ -23,19 +23,19 @@ export const authService = {
         email,
         password,
       });
-      localStorage.setItem('token', response.data.token);
+      localStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error) {
-      throw error.response?.data || { message: 'Login failed' };
+      throw error.response?.data || { message: "Login failed" };
     }
   },
 
   logout: () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
   },
 
   getToken: () => {
-    return localStorage.getItem('token');
+    return localStorage.getItem("token");
   },
 
   authHeader: () => {
