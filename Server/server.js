@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import path from "path";
-
+import morgan from "morgan";
 // Import routes
 import productRoute from "./route/product.js";
 import userRoute from "./route/user.js";
@@ -15,7 +15,7 @@ import reviewRouter from "./route/reviewRoutes.js";
 dotenv.config();
 
 const app = express();
-
+app.use(morgan("dev"));
 // Enable CORS
 app.use(cors());
 
@@ -42,7 +42,7 @@ app.use("/api/v3/product", productRoute);
 app.use("/api/v3/user", userRoute);
 app.use("/api/v3/cart", cartRouter);
 app.use("/api/v3/order", orderRouter);
-app.use('/review',reviewRouter)
+app.use("/api/v3/review", reviewRouter);
 
 // Start server
 const port = process.env.PORT || 4000;
