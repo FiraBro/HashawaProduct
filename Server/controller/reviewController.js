@@ -1,5 +1,5 @@
 import Review from "../model/review.js";
-
+import User from "../model/user.js";
 // @desc    Create new review
 // @route   POST /api/reviews
 // @access  Private
@@ -44,7 +44,6 @@ import Review from "../model/review.js";
 //   }
 // };
 
-import User from "../models/User.js"; // import User model if not already
 
 export const createReview = async (req, res) => {
   try {
@@ -64,13 +63,14 @@ export const createReview = async (req, res) => {
     }
 
     // Fetch user profile image
-    const user = await User.findById(req.user.id).select("profileImage name");
+    const user = await User.findById(req.user.id).select("userImage name");
     if (!user) {
       return res.status(404).json({
         success: false,
         message: "User not found",
       });
     }
+console.log("User fetched:", user);
 
     const review = new Review({
       productId,
@@ -80,7 +80,7 @@ export const createReview = async (req, res) => {
       comment,
       images,
       verifiedPurchase: true,
-      userImage: user.profileImage,  // ← attach user's profile image
+      userImage:user.userImage,  // ← attach user's profile image
       userName: user.name,           // optional: include user name
     });
 
