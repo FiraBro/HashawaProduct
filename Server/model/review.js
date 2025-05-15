@@ -30,11 +30,9 @@ const reviewSchema = new mongoose.Schema(
       trim: true,
       maxlength: 500,
     },
-    images: [
-      {
-        type: String,
-      },
-    ],
+    userImage: {
+      type: String,
+    },
     verifiedPurchase: {
       type: Boolean,
       default: false,
