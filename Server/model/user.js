@@ -16,6 +16,11 @@ const userSchema = new mongoose.Schema({
     unique: true,
     lowercase: true,
   },
+
+  userImage: {
+    type: String,
+    default:'default.jpg'
+  },
 });
 
 // Hash the password before saving
