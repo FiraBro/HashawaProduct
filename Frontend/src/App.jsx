@@ -1,25 +1,15 @@
 import React from "react";
-import Navbar from "./components/Navbar/Navbar";
-import Hero from "./components/Hero/Hero";
-import Products from "./components/Product/Product";
-import About from "./components/About/About";
-import Services from "./components/Services/Service";
-import Footer from "./components/Footer/Footer";
-import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
-// import styles from "./App.module.css";
+import HomePage from "./Pages/HomePage";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-function App() {
-  return (
-    <div>
-      <Navbar />
-      <Hero />
-      <Products />
-      <About />
-      <Services />
-      <Footer />
-      <ScrollToTop />
-    </div>
-  );
+// 1. Define your routes
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomePage />,
+  },
+]);
+
+export default function App() {
+  return <RouterProvider router={router} />;
 }
-
-export default App;
