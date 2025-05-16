@@ -8,31 +8,27 @@ import {
   FaTimes,
   FaBars,
 } from "react-icons/fa";
-import { useCart } from "../context/cartContext"; // ✅ import context
+import { useCart } from "../context/cartContext"; // import context
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const { cartCount } = useCart(); // ✅ get cartCount from context
+  const { cartCount } = useCart(); // get cartCount from context
   const isLoggedIn = localStorage.getItem("token");
 
   return (
     <header className={styles.header}>
-      {/* Top Announcement Bar */}
       <div className={styles.announcementBar}>
         <p>Free shipping on orders over $50 | 30-day return policy</p>
       </div>
 
-      {/* Main Navigation */}
       <div className={styles.mainNav}>
         <div className={styles.container}>
-          {/* Logo */}
           <div className={styles.logo}>
             <span className={styles.logoPrimary}>ABDI</span>
             <span className={styles.logoSecondary}>HOPE</span>
           </div>
 
-          {/* Desktop Navigation */}
           <nav
             className={`${styles.nav} ${
               isMenuOpen ? styles.mobileNavActive : ""
@@ -46,7 +42,6 @@ const Navbar = () => {
               <FaTimes />
             </button>
 
-            {/* Search Bar (Mobile) */}
             <div className={styles.mobileSearch}>
               <input
                 type="text"
@@ -58,7 +53,6 @@ const Navbar = () => {
               </button>
             </div>
 
-            {/* Navigation Links */}
             <ul className={styles.navList}>
               <li className={styles.navItem}>
                 <Link
@@ -105,7 +99,6 @@ const Navbar = () => {
             </div>
           </nav>
 
-          {/* Right Side Icons */}
           <div className={styles.navIcons}>
             <button
               className={styles.iconButton}
@@ -128,7 +121,6 @@ const Navbar = () => {
               </div>
             )}
 
-            {/* Account / Logout */}
             {isLoggedIn ? (
               <button
                 className={styles.iconButton}
@@ -147,7 +139,6 @@ const Navbar = () => {
               </Link>
             )}
 
-            {/* Cart */}
             {isLoggedIn && (
               <Link to="/cart" className={styles.cartIcon}>
                 <FaShoppingCart />
@@ -158,7 +149,6 @@ const Navbar = () => {
               </Link>
             )}
 
-            {/* Mobile Menu Toggle */}
             <button
               className={styles.mobileMenuToggle}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
