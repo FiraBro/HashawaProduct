@@ -4,11 +4,63 @@ import User from "../model/user.js";
 // @route   POST /api/reviews
 // @access  Private
 
+// export const createReview = async (req, res) => {
+//   try {
+//     const { productId, rating, title, comment, images } = req.body;
+
+//     // Check if user already reviewed this product
+//     const existingReview = await Review.findOne({
+//       productId,
+//       userId: req.user.id,
+//     });
+
+//     if (existingReview) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "You already reviewed this product",
+//       });
+//     }
+
+//     // Fetch user profile image
+//     const user = await User.findById(req.user.id).select("userImage name");
+//     if (!user) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "User not found",
+//       });
+//     }
+//     console.log("User fetched:", user);
+
+//     const review = new Review({
+//       productId,
+//       userId: req.user.id,
+//       rating,
+//       title,
+//       comment,
+//       images,
+//       verifiedPurchase: true,
+//       userImage: user.userImage, // ← attach user's profile image
+//       userName: user.name, // optional: include user name
+//     });
+
+//     await review.save();
+
+//     res.status(201).json({
+//       success: true,
+//       data: review,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
+
 export const createReview = async (req, res) => {
   try {
     const { productId, rating, title, comment, images } = req.body;
 
-    // Check if user already reviewed this product
     const existingReview = await Review.findOne({
       productId,
       userId: req.user.id,
@@ -21,33 +73,27 @@ export const createReview = async (req, res) => {
       });
     }
 
-    // Fetch user profile image
-    const user = await User.findById(req.user.id).select("userImage name");
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-    console.log("User fetched:", user);
-
     const review = new Review({
       productId,
-      userId: req.user.id,
+      userId: req.user.id, // Just store reference
       rating,
       title,
       comment,
       images,
       verifiedPurchase: true,
-      userImage: user.userImage, // ← attach user's profile image
-      userName: user.name, // optional: include user name
     });
 
     await review.save();
 
+    // Populate user data when returning the review
+    const populatedReview = await Review.findById(review._id).populate(
+      "userId",
+      "name userImage"
+    );
+
     res.status(201).json({
       success: true,
-      data: review,
+      data: populatedReview,
     });
   } catch (error) {
     res.status(500).json({
@@ -56,14 +102,17 @@ export const createReview = async (req, res) => {
     });
   }
 };
-
 // @desc    Get reviews for a product
 // @route   GET /api/products/:productId/reviews
 // @access  Public
 export const getProductReviews = async (req, res) => {
   try {
     const reviews = await Review.find({ productId: req.params.productId })
-      .populate("userId", "name avatar")
+      // .populate("userId", "name avatar")
+      .populate({
+        path: "userId",
+        select: "name userImage",
+      })
       .sort({ createdAt: -1 });
 
     res.json({
@@ -86,7 +135,7 @@ export const getTestimonials = async (req, res) => {
   try {
     const testimonials = await Review.find({ rating: { $gte: 4 } })
       .populate("productId", "name mainImage")
-      .populate("userId", "name avatar")
+      .populate("userId", "name userImage")
       .sort({ createdAt: -1 })
       .limit(6);
 
