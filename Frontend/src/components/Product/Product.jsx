@@ -78,7 +78,7 @@ const Product = () => {
   if (!products || products.length === 0) return <p>No Products Available</p>;
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} id="products">
       {products.map((product) => (
         <div key={product._id} className={styles.card}>
           <h2 className={styles.name}>{product.name}</h2>

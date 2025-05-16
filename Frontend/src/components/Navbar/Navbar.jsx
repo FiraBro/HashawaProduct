@@ -16,6 +16,15 @@ const Navbar = () => {
   const { cartCount } = useCart(); // get cartCount from context
   const isLoggedIn = localStorage.getItem("token");
 
+  const handleSmoothScroll = (e, targetId) => {
+    e.preventDefault();
+    const targetElement = document.querySelector(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: "smooth" });
+      setIsMenuOpen(false);
+    }
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.announcementBar}>
@@ -55,40 +64,31 @@ const Navbar = () => {
 
             <ul className={styles.navList}>
               <li className={styles.navItem}>
-                <Link
-                  to="/home"
+                <a
+                  href="#products"
                   className={styles.navLink}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Home
-                </Link>
-              </li>
-              <li className={styles.navItem}>
-                <Link
-                  to="/products"
-                  className={styles.navLink}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={(e) => handleSmoothScroll(e, "#products")}
                 >
                   Products
-                </Link>
+                </a>
               </li>
               <li className={styles.navItem}>
-                <Link
-                  to="/service"
+                <a
+                  href="#service"
                   className={styles.navLink}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={(e) => handleSmoothScroll(e, "#service")}
                 >
                   Services
-                </Link>
+                </a>
               </li>
               <li className={styles.navItem}>
-                <Link
-                  to="/contact"
+                <a
+                  href="#contact"
                   className={styles.navLink}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={(e) => handleSmoothScroll(e, "#contact")}
                 >
                   Contact
-                </Link>
+                </a>
               </li>
             </ul>
 
