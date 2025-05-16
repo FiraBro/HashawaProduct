@@ -33,10 +33,10 @@ const Navbar = () => {
 
       <div className={styles.mainNav}>
         <div className={styles.container}>
-          <div className={styles.logo}>
+          <a href="/" className={styles.logo}>
             <span className={styles.logoPrimary}>ABDI</span>
             <span className={styles.logoSecondary}>HOPE</span>
-          </div>
+          </a>
 
           <nav
             className={`${styles.nav} ${
