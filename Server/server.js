@@ -12,6 +12,7 @@ import userRoute from "./route/user.js";
 import cartRouter from "./route/cart.js";
 import orderRouter from "./route/order.js";
 import reviewRouter from "./route/reviewRoutes.js";
+import userRouter from "./route/updateUser.js";
 
 // Load environment variables
 dotenv.config();
@@ -43,6 +44,7 @@ app.use("/api/v3/user", userRoute);
 app.use("/api/v3/cart", cartRouter);
 app.use("/api/v3/order", orderRouter);
 app.use("/api/v3/review", reviewRouter);
+app.use('/api/v3/update',userRouter)
 
 // Start server
 const port = process.env.PORT || 4000;
