@@ -77,10 +77,60 @@ export async function getCart(req, res) {
     const cart = await Cart.findOne({ user: userId }).populate("items.product");
     if (!cart) return res.status(404).json({ message: "Cart not found" });
 
-    res.status(200).json({length:cart.length, cart });
+    res.status(200).json({ length: cart.length, cart });
   } catch (err) {
     res
       .status(500)
       .json({ message: "Error fetching cart", error: err.message });
+  }
+}
+/**
+ * Update quantity of an item in the cart (increment/decrement)
+ */
+export async function updateCartQuantity(req, res) {
+  try {
+    const { productId, variantColor, action } = req.body;
+    const userId = req.user.id;
+
+    if (!productId || !variantColor || !action) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const cart = await Cart.findOne({ user: userId });
+    if (!cart) return res.status(404).json({ message: "Cart not found" });
+
+    const item = cart.items.find(
+      (item) =>
+        item.product.toString() === productId &&
+        item.variantColor === variantColor
+    );
+
+    if (!item) {
+      return res.status(404).json({ message: "Item not found in cart" });
+    }
+
+    if (action === "increment") {
+      item.quantity += 1;
+    } else if (action === "decrement") {
+      item.quantity -= 1;
+      if (item.quantity <= 0) {
+        // Automatically remove the item if quantity drops to zero
+        cart.items = cart.items.filter(
+          (i) =>
+            !(
+              i.product.toString() === productId &&
+              i.variantColor === variantColor
+            )
+        );
+      }
+    } else {
+      return res.status(400).json({ message: "Invalid action" });
+    }
+
+    await cart.save();
+    res.status(200).json({ message: "Cart updated", cart });
+  } catch (err) {
+    console.error("Update cart quantity error:", err);
+    res.status(500).json({ message: "Internal server error" });
   }
 }
