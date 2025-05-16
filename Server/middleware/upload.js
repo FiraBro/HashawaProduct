@@ -32,3 +32,4 @@ const fileFilter = (req, file, cb) => {
   { name: "variant1_side" },
   { name: "variant1_back" },
 ]);
+
