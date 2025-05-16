@@ -1,9 +1,7 @@
+import axios from "axios";
+import { authService } from "./authService";
 
-// 📁 services/cartService.js
-import axios from 'axios';
-import { authService } from './authService';
-
-const API_URL = 'http://localhost:3000/api/v3/cart';
+const API_URL = "http://localhost:3000/api/v3/cart";
 
 export const cartService = {
   addToCart: async ({ productId, variantColor, quantity }) => {
@@ -15,7 +13,7 @@ export const cartService = {
       );
       return response.data;
     } catch (error) {
-      throw error.response?.data || { message: 'Failed to add to cart' };
+      throw error.response?.data || { message: "Failed to add to cart" };
     }
   },
 
@@ -28,7 +26,7 @@ export const cartService = {
       );
       return response.data;
     } catch (error) {
-      throw error.response?.data || { message: 'Failed to remove from cart' };
+      throw error.response?.data || { message: "Failed to remove from cart" };
     }
   },
 
@@ -37,10 +35,22 @@ export const cartService = {
       const response = await axios.get(`${API_URL}/get`, {
         headers: authService.authHeader(),
       });
-      console.log(response)
       return response;
     } catch (error) {
-      throw error.response?.data || { message: 'Failed to fetch cart' };
+      throw error.response?.data || { message: "Failed to fetch cart" };
+    }
+  },
+
+  updateCartQuantity: async ({ productId, variantColor, action }) => {
+    try {
+      const response = await axios.put(
+        `${API_URL}/update-quantity`,
+        { productId, variantColor, action },
+        { headers: authService.authHeader() }
+      );
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || { message: "Failed to update quantity" };
     }
   },
 };
