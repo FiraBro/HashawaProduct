@@ -3,6 +3,7 @@ import HomePage from "./Pages/HomePage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuthForm from "./components/Auth/AuthForm";
 import Cart from "./Pages/CartPage";
+import TrackOrder from "./Pages/TrackOrderPage";
 
 // 1. Define your routes
 const router = createBrowserRouter([
@@ -17,6 +18,9 @@ const router = createBrowserRouter([
   {
     path:'/cart',
     element:<Cart />
+  },{
+    path:'/track',
+    element:<TrackOrder />
   }
 
 ]);
