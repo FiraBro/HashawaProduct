@@ -3,47 +3,6 @@ import User from "../model/user.js";
 // @desc    Create new review
 // @route   POST /api/reviews
 // @access  Private
-// export const createReview = async (req, res) => {
-//   try {
-//     const { productId, rating, title, comment, images } = req.body;
-
-//     // Check if user already reviewed this product
-//     const existingReview = await Review.findOne({
-//       productId,
-//       userId: req.user.id,
-//     });
-
-//     if (existingReview) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "You already reviewed this product",
-//       });
-//     }
-
-//     const review = new Review({
-//       productId,
-//       userId: req.user.id,
-//       rating,
-//       title,
-//       comment,
-//       images,
-//       verifiedPurchase: true, // Set based on actual purchase verification
-//     });
-
-//     await review.save();
-
-//     res.status(201).json({
-//       success: true,
-//       data: review,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       message:error.message,
-//     });
-//   }
-// };
-
 
 export const createReview = async (req, res) => {
   try {
@@ -70,7 +29,7 @@ export const createReview = async (req, res) => {
         message: "User not found",
       });
     }
-console.log("User fetched:", user);
+    console.log("User fetched:", user);
 
     const review = new Review({
       productId,
@@ -80,8 +39,8 @@ console.log("User fetched:", user);
       comment,
       images,
       verifiedPurchase: true,
-      userImage:user.userImage,  // ← attach user's profile image
-      userName: user.name,           // optional: include user name
+      userImage: user.userImage, // ← attach user's profile image
+      userName: user.name, // optional: include user name
     });
 
     await review.save();
@@ -97,7 +56,6 @@ console.log("User fetched:", user);
     });
   }
 };
-
 
 // @desc    Get reviews for a product
 // @route   GET /api/products/:productId/reviews
