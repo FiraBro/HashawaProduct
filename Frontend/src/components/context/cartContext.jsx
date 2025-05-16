@@ -1,32 +1,18 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { cartService } from "../../Service/cartService";
 
 const CartContext = createContext();
-
-export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [cartCount, setCartCount] = useState(0);
 
   const fetchCartCount = async () => {
     try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-
       const { data } = await cartService.getCart();
-      const total = data.cart.reduce((acc, item) => acc + item.quantity, 0);
-      setCartCount(total);
-    } catch (err) {
-      console.error("Failed to fetch cart count:", err);
-    }
-  };
-
-  const addToCart = async (productId, quantity = 1) => {
-    try {
-      await cartService.addToCart(productId, quantity);
-      fetchCartCount(); // update count after adding
-    } catch (err) {
-      console.error("Add to cart failed", err);
+      const totalItems = data.cart.items.reduce((sum, item) => sum + item.quantity, 0);
+      setCartCount(totalItems);
+    } catch (error) {
+      console.error("Error fetching cart count:", error);
     }
   };
 
@@ -35,8 +21,10 @@ export const CartProvider = ({ children }) => {
   }, []);
 
   return (
-    <CartContext.Provider value={{ cartCount, fetchCartCount, addToCart }}>
+    <CartContext.Provider value={{ cartCount, fetchCartCount }}>
       {children}
     </CartContext.Provider>
   );
 };
+
+export const useCart = () => useContext(CartContext);
