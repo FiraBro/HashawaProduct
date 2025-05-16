@@ -4,59 +4,6 @@ import User from "../model/user.js";
 // @route   POST /api/reviews
 // @access  Private
 
-// export const createReview = async (req, res) => {
-//   try {
-//     const { productId, rating, title, comment, images } = req.body;
-
-//     // Check if user already reviewed this product
-//     const existingReview = await Review.findOne({
-//       productId,
-//       userId: req.user.id,
-//     });
-
-//     if (existingReview) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "You already reviewed this product",
-//       });
-//     }
-
-//     // Fetch user profile image
-//     const user = await User.findById(req.user.id).select("userImage name");
-//     if (!user) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "User not found",
-//       });
-//     }
-//     console.log("User fetched:", user);
-
-//     const review = new Review({
-//       productId,
-//       userId: req.user.id,
-//       rating,
-//       title,
-//       comment,
-//       images,
-//       verifiedPurchase: true,
-//       userImage: user.userImage, // ← attach user's profile image
-//       userName: user.name, // optional: include user name
-//     });
-
-//     await review.save();
-
-//     res.status(201).json({
-//       success: true,
-//       data: review,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       success: false,
-//       message: error.message,
-//     });
-//   }
-// };
-
 export const createReview = async (req, res) => {
   try {
     const { productId, rating, title, comment, images } = req.body;
