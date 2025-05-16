@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "../Navbar/Navbar.module.css";
-import { cartService } from "../../Service/cartService";
 import { Link } from "react-router-dom";
 import {
   FaShoppingCart,
@@ -9,32 +8,13 @@ import {
   FaTimes,
   FaBars,
 } from "react-icons/fa";
+import { useCart } from "../context/cartContext"; // ✅ import context
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
+  const { cartCount } = useCart(); // ✅ get cartCount from context
   const isLoggedIn = localStorage.getItem("token");
-
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        if (!isLoggedIn) return;
-
-        const { data } = await cartService.getCart();
-        // Assuming structure: { cart: [{ quantity: 2 }, { quantity: 1 }] }
-        const totalItems = data.cart.items.reduce(
-          (acc, item) => acc + item.quantity,
-          0
-        );
-        setCartCount(totalItems);
-      } catch (error) {
-        console.error("Error fetching cart:", error);
-      }
-    };
-
-    fetchCart();
-  }, [isLoggedIn]);
 
   return (
     <header className={styles.header}>
