@@ -1,0 +1,29 @@
+.trackContainer {
+  padding: 2rem;
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+}
+
+.input {
+  padding: 0.5rem;
+  width: 80%;
+  margin-bottom: 1rem;
+}
+
+.button {
+  padding: 0.5rem 1rem;
+  background-color: #222;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.orderDetails {
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.error {
+  color: red;
+}
