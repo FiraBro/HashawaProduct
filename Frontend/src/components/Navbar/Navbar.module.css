@@ -36,6 +36,7 @@
   cursor: pointer;
   flex-shrink: 0;
   margin-right: 2rem;
+  text-decoration: none;
 }
 
 .logoPrimary {
@@ -293,5 +294,6 @@
   .logo {
     font-size: 1.5rem;
     margin-right: 1rem;
+    
   }
 }
