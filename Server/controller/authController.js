@@ -7,76 +7,35 @@ import jwt from "jsonwebtoken";
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  */
-// export async function register(req, res) {
-//   try {
-//     const { name, email, password } = req.body;
-
-//     // Check for missing fields
-//     if (!name || !email || !password) {
-//       return res.status(400).json({ message: "All fields are required." });
-//     }
-
-//     // Check if user already exists
-//     const existingUser = await User.findOne({ email });
-//     if (existingUser) {
-//       return res.status(409).json({ message: "User already exists." });
-//     }
-
-//     // Create new user
-//     const newUser = new User({ name, email, password });
-//     await newUser.save();
-//     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-//       expiresIn: "1d",
-//     });
-//     res.status(201).json({ status: "false", user: newUser, token });
-//   } catch (error) {
-//     console.error("Registration error:", error);
-//     res.status(500).json({ message: "Internal server error." });
-//   }
-// }
-
 export async function register(req, res) {
   try {
     const { name, email, password } = req.body;
-    const userImageFile = req.files?.userImage?.[0]; // Access the uploaded file
 
-    // Validate required fields
+    // Check for missing fields
     if (!name || !email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Name, email, and password are required." });
+      return res.status(400).json({ message: "All fields are required." });
     }
 
-    // Check if user exists
+    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(409).json({ message: "User already exists." });
     }
 
-    // Construct user data (include image path if uploaded)
-    const userData = {
-      name,
-      email,
-      password,
-      userImage: userImageFile ? `/uploads/${userImageFile.filename}` : "", // Local path
-    };
-
-    const newUser = new User(userData);
+    // Create new user
+    const newUser = new User({ name, email, password });
     await newUser.save();
-
-    // Generate JWT token
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
-
-    res.status(201).json({ status: "success", user: newUser, token });
+    res.status(201).json({ status: "true", user: newUser, token });
   } catch (error) {
     console.error("Registration error:", error);
-    res
-      .status(500)
-      .json({ message: error.message || "Internal server error." });
+    res.status(500).json({ message: "Internal server error." });
   }
 }
+
+
 export async function login(req, res) {
   try {
     const { email, password } = req.body;
