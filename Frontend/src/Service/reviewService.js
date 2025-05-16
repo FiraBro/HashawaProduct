@@ -1,7 +1,7 @@
 import axios from "axios";
 import { authService } from "./authService";
 
-const API_URL = "http://localhost:4000/api/reviews";
+const API_URL = "http://localhost:3000/api/v3/review";
 
 export const reviewService = {
   // Submit a new review
@@ -25,11 +25,12 @@ export const reviewService = {
       throw error.response?.data || { message: "Failed to fetch reviews" };
     }
   },
-
+  
   // Get testimonials for homepage
   getTestimonials: async () => {
     try {
       const response = await axios.get(`${API_URL}/testimonials`);
+      console.log(response)
       return response.data.data;
     } catch (error) {
       throw error.response?.data || { message: "Failed to fetch testimonials" };
