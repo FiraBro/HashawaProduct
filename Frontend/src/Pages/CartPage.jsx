@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { cartService } from "../Service/cartService";
+import { useCart } from "../components/context/cartContext";
 import styles from "./CartPage.module.css";
 
 const Cart = () => {
@@ -8,14 +9,16 @@ const Cart = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
+  const { fetchCartCount } = useCart();
 
   // Fetch cart from backend
   useEffect(() => {
     const fetchCart = async () => {
       try {
         const { data } = await cartService.getCart();
-        setCartItems(data.cart.items);
+        setCartItems(data.cart?.items || []);
         setLoading(false);
+        fetchCartCount(); // update cart count on load
       } catch (err) {
         setError("Failed to load cart");
         setLoading(false);
@@ -24,21 +27,22 @@ const Cart = () => {
     };
 
     fetchCart();
-  }, []);
+  }, [fetchCartCount]);
 
-  const updateQuantity = async (productId, variantColor, newQuantity) => {
-    if (newQuantity < 1 || isUpdating) return;
+  const updateQuantity = async (productId, variantColor, action) => {
+    if (isUpdating) return;
     setIsUpdating(true);
 
     try {
-      await cartService.updateCartItem({
+      await cartService.updateCartQuantity({
         productId,
         variantColor,
-        quantity: newQuantity,
+        action, // "increment" or "decrement"
       });
 
       const { data } = await cartService.getCart();
-      setCartItems(data.cart.items);
+      setCartItems(data.cart?.items || []);
+      fetchCartCount(); // refresh cart count after update
     } catch (err) {
       console.error(err);
       alert("Failed to update quantity");
@@ -55,7 +59,8 @@ const Cart = () => {
       await cartService.removeFromCart({ productId, variantColor });
 
       const { data } = await cartService.getCart();
-      setCartItems(data.cart.items);
+      setCartItems(data.cart?.items || []);
+      fetchCartCount(); // refresh cart count after remove
     } catch (err) {
       console.error(err);
       alert("Failed to remove item");
@@ -97,14 +102,17 @@ const Cart = () => {
       </div>
     );
 
-  if (cartItems.length === 0) {
+  if (!Array.isArray(cartItems) || cartItems.length === 0) {
     return (
       <div className={styles.emptyCart}>
         <div className={styles.emptyCartIllustration}>
+          {/* Your SVG illustration */}
           <svg
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            width="100"
+            height="100"
           >
             <path
               d="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6Z"
@@ -200,7 +208,7 @@ const Cart = () => {
                           updateQuantity(
                             product._id,
                             variant.color,
-                            quantity - 1
+                            "decrement"
                           )
                         }
                         disabled={quantity <= 1 || isUpdating}
@@ -214,7 +222,7 @@ const Cart = () => {
                           updateQuantity(
                             product._id,
                             variant.color,
-                            quantity + 1
+                            "increment"
                           )
                         }
                         disabled={quantity >= variant.stock || isUpdating}
@@ -284,8 +292,10 @@ const Cart = () => {
                 <span>Total</span>
                 <span className={styles.totalPrice}>
                   $
-                  {parseFloat(calculateTotal()) +
-                    (parseFloat(calculateTotal()) * 0.08).toFixed(2)}
+                  {(
+                    parseFloat(calculateTotal()) +
+                    parseFloat(calculateTotal()) * 0.08
+                  ).toFixed(2)}
                 </span>
               </div>
             </div>
@@ -299,21 +309,11 @@ const Cart = () => {
             </button>
 
             <div className={styles.paymentOptions}>
+              <div className={styles.paymentIcon}>{/* Visa SVG icon */}</div>
               <div className={styles.paymentIcon}>
-                <svg viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg">
-                  {/* Visa logo SVG */}
-                </svg>
+                {/* Mastercard SVG icon */}
               </div>
-              <div className={styles.paymentIcon}>
-                <svg viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg">
-                  {/* Mastercard logo SVG */}
-                </svg>
-              </div>
-              <div className={styles.paymentIcon}>
-                <svg viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg">
-                  {/* PayPal logo SVG */}
-                </svg>
-              </div>
+              <div className={styles.paymentIcon}>{/* PayPal SVG icon */}</div>
             </div>
 
             <Link to="/" className={styles.continueShopping}>
