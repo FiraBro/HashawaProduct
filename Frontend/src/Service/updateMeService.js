@@ -1,8 +1,9 @@
 import axios from "axios";
 import { authService } from "./authService";
 
-const API_URL = "http://localhost:3000/api/v3/update";
-
+const API_URL =
+  import.meta.env.VITE_UPDATEME_API_URL ||
+  "http://localhost:3000/api/v3/update";
 // Update user profile (name, email, and optional userImage)
 export const updateUserProfile = async (data) => {
   const formData = new FormData();
