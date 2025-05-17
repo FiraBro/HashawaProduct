@@ -84,11 +84,41 @@ export const getTestimonials = async (req, res) => {
       .populate("productId", "name mainImage")
       .populate("userId", "name userImage")
       .sort({ createdAt: -1 })
-      .limit(6);
+      .limit(3);
 
     res.json({
       success: true,
       data: testimonials,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+// @desc    Delete a review
+// @route   DELETE /api/reviews/:reviewId
+// @access  Private
+export const deleteReview = async (req, res) => {
+  try {
+    const { reviewId } = req.params;
+
+    // Find the review
+    const review = await Review.findById(reviewId);
+
+    if (!review) {
+      return res.status(404).json({
+        success: false,
+        message: "Review not found",
+      });
+    }
+
+    await review.deleteOne();
+
+    res.json({
+      success: true,
+      message: "Review deleted successfully",
     });
   } catch (error) {
     res.status(500).json({
