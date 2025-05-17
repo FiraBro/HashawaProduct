@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./ReviewPop.module.css";
-import { reviewService } from "../../Service/reviewService"; 
+import { reviewService } from "../../Service/reviewService";
+import { toast } from "react-toastify";
 
 const ReviewPopup = ({ onClose, product }) => {
   const [title, setTitle] = useState("");
@@ -16,11 +17,12 @@ const ReviewPopup = ({ onClose, product }) => {
         rating,
         comment,
       });
-      alert("Review submitted successfully!");
+      toast.success("✅ Review submitted successfully!");
       onClose();
     } catch (error) {
       console.error("Review submission failed:", error);
-      alert("Failed to submit review. Please try again.");
+      // toast.error("❌ Failed to submit review. Please try again.");
+      toast(error.message);
     }
   };
 
