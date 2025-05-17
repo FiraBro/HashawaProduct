@@ -5,6 +5,7 @@ import AuthForm from "./components/Auth/AuthForm";
 import Cart from "./Pages/CartPage";
 import TrackOrder from "./Pages/TrackOrderPage";
 import LoadingScreen from "./components/Loading/LoadingScreen";
+import { ToastContainer } from "react-toastify";
 
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
@@ -27,6 +28,18 @@ export default function App() {
     <>
       {isAppLoading && <LoadingScreen />}
       {!isAppLoading && <RouterProvider router={router} />}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </>
   );
 }
