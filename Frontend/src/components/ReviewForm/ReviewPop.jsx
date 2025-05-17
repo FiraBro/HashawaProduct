@@ -20,8 +20,6 @@ const ReviewPopup = ({ onClose, product }) => {
       toast.success("✅ Review submitted successfully!");
       onClose();
     } catch (error) {
-      console.error("Review submission failed:", error);
-      // toast.error("❌ Failed to submit review. Please try again.");
       toast(error.message);
     }
   };
