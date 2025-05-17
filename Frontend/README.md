@@ -1,2 +1,2 @@
-h1 🥿 Hashawa Shoe – Frontend
+ 🥿 Hashawa Shoe – Frontend
 This is the frontend of Abdihope Shoe, an online shoe store where users can browse stylish footwear, add items to their cart, and place orders seamlessly. Built with modern React and CSS Module for a fast, responsive shopping experience.
