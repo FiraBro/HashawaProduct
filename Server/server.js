@@ -28,10 +28,7 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err);
@@ -44,7 +41,7 @@ app.use("/api/v3/user", userRoute);
 app.use("/api/v3/cart", cartRouter);
 app.use("/api/v3/order", orderRouter);
 app.use("/api/v3/review", reviewRouter);
-app.use('/api/v3/update',userRouter)
+app.use("/api/v3/update", userRouter);
 
 // Start server
 const port = process.env.PORT || 4000;
