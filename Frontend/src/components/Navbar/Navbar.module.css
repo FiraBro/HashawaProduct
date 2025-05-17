@@ -28,7 +28,6 @@
   justify-content: space-between;
 }
 
-/* Logo */
 .logo {
   font-size: 1.8rem;
   font-weight: 700;
@@ -42,12 +41,34 @@
 .logoPrimary {
   color: #111;
 }
+.navBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #4a90e2;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.navBtn:hover {
+  background-color: #6cacf5;
+;
+}
+
+.navBtnIcon {
+  font-size: 1rem;
+}
 
 .logoSecondary {
   color: #4a90e2;
 }
 
-/* Navigation */
 .nav {
   display: flex;
   flex: 1;
@@ -60,7 +81,10 @@
   padding: 0;
   align-items: center;
 }
-
+.oneItem {
+  display: flex;
+  align-items: center;
+}
 .navItem {
   margin: 0 1rem;
 }
@@ -94,7 +118,6 @@
   width: 100%;
 }
 
-/* Icons */
 .navIcons {
   display: flex;
   align-items: center;
@@ -150,7 +173,6 @@
   font-weight: bold;
 }
 
-/* Search */
 .desktopSearch {
   position: absolute;
   top: 100%;
@@ -182,7 +204,6 @@
   cursor: pointer;
 }
 
-/* Mobile Menu */
 .mobileMenuToggle {
   display: none;
   background: none;
@@ -226,7 +247,6 @@
   gap: 0.5rem;
 }
 
-/* Responsive Styles */
 @media (max-width: 992px) {
   .nav {
     position: fixed;
@@ -294,6 +314,5 @@
   .logo {
     font-size: 1.5rem;
     margin-right: 1rem;
-    
   }
 }
