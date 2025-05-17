@@ -6,37 +6,26 @@ import sharp from "sharp";
 import path from "path";
 import fs from "fs";
 
-// Multer configuration for memory storage and image filtering
+// Multer config
 const multerStorage = multer.memoryStorage();
-
 const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image")) {
-    cb(null, true);
-  } else {
-    cb(new Error("Please upload only images."), false);
-  }
+  if (file.mimetype.startsWith("image")) cb(null, true);
+  else cb(new Error("Please upload only images."), false);
 };
 
-const upload = multer({
-  storage: multerStorage,
-  fileFilter: multerFilter,
-});
+const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 
-// Middleware to handle single image upload under field 'userImage'
+// Middleware to upload single image under field 'userImage'
 export const uploadPhoto = upload.single("userImage");
 
-// Middleware to resize user photo and save to disk
-
+// Middleware to resize and save image to disk
 export async function userPhotoResize(req, res, next) {
   if (!req.file) return next();
 
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
 
-  // Ensure directory exists
   const uploadDir = path.join("uploads", "userImage");
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-  }
+  if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
   try {
     await sharp(req.file.buffer)
@@ -51,7 +40,7 @@ export async function userPhotoResize(req, res, next) {
   next();
 }
 
-// Utility to filter allowed fields from an object
+// Filter allowed fields for update
 const filterObj = (obj, allowedFields) => {
   const newObj = {};
   Object.keys(obj).forEach((el) => {
@@ -60,7 +49,7 @@ const filterObj = (obj, allowedFields) => {
   return newObj;
 };
 
-// Update current user profile (except password)
+// Update user and delete old image if a new one is uploaded
 export async function updateMe(req, res, next) {
   try {
     if (req.body.password) {
@@ -71,18 +60,37 @@ export async function updateMe(req, res, next) {
       });
     }
 
-    // Filter only allowed fields
+    // Find current user
+    const currentUser = await User.findById(req.user.id);
+
+    // Prepare allowed fields
     const filteredFields = filterObj(req.body, ["name", "email"]);
 
-    if (req.file) filteredFields.userImage = req.file.filename;
+    // If a new image was uploaded
+    if (req.file) {
+      // Delete old image if it exists
+      if (currentUser.userImage) {
+        const oldImagePath = path.join(
+          "uploads",
+          "userImage",
+          currentUser.userImage
+        );
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlink(oldImagePath, (err) => {
+            if (err) console.error("❌ Error deleting old image:", err.message);
+          });
+        }
+      }
 
+      // Add new image filename to update
+      filteredFields.userImage = req.file.filename;
+    }
+
+    // Update user
     const updatedUser = await User.findByIdAndUpdate(
       req.user.id,
       filteredFields,
-      {
-        new: true,
-        runValidators: true,
-      }
+      { new: true, runValidators: true }
     );
 
     res.status(200).json({
