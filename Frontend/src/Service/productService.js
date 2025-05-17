@@ -2,7 +2,9 @@
 import axios from "axios";
 import { authService } from "./authService";
 
-const API_URL = "http://localhost:3000/api/v3/product";
+const API_URL =
+  import.meta.env.VITE_PRODUCT_API_URL ||
+  "http://localhost:3000/api/v3/product";
 
 export const productService = {
   createProduct: async (formData) => {
@@ -33,7 +35,7 @@ export const productService = {
   getAllProducts: async () => {
     try {
       const response = await axios.get(`${API_URL}`);
-      console.log(response)
+      console.log(response);
       return response.data.data.product;
     } catch (error) {
       throw error.response?.data || { message: "Failed to fetch products" };
