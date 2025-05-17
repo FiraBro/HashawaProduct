@@ -1,7 +1,8 @@
 import axios from "axios";
 import { authService } from "./authService";
 
-const API_URL = "http://localhost:3000/api/v3/cart";
+const API_URL =
+  import.meta.env.VITE_CART_API_URL || "http://localhost:3000/api/v3/cart";
 
 export const cartService = {
   addToCart: async ({ productId, variantColor, quantity }) => {
