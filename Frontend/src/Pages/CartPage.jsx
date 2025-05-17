@@ -4,6 +4,7 @@ import { cartService } from "../Service/cartService";
 import { useCart } from "../components/context/cartContext";
 import styles from "./CartPage.module.css";
 import Navbar from "../components/Navbar/Navbar";
+import ReviewPopup from "../components/ReviewForm/ReviewPop";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -12,14 +13,16 @@ const Cart = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const { fetchCartCount } = useCart();
 
-  // Fetch cart from backend
+  const [showReview, setShowReview] = useState(false); // Added
+  const [selectedProduct, setSelectedProduct] = useState(null); // Added
+
   useEffect(() => {
     const fetchCart = async () => {
       try {
         const { data } = await cartService.getCart();
         setCartItems(data.cart?.items || []);
         setLoading(false);
-        fetchCartCount(); // update cart count on load
+        fetchCartCount();
       } catch (err) {
         setError("Failed to load cart");
         setLoading(false);
@@ -33,17 +36,11 @@ const Cart = () => {
   const updateQuantity = async (productId, variantColor, action) => {
     if (isUpdating) return;
     setIsUpdating(true);
-
     try {
-      await cartService.updateCartQuantity({
-        productId,
-        variantColor,
-        action, // "increment" or "decrement"
-      });
-
+      await cartService.updateCartQuantity({ productId, variantColor, action });
       const { data } = await cartService.getCart();
       setCartItems(data.cart?.items || []);
-      fetchCartCount(); // refresh cart count after update
+      fetchCartCount();
     } catch (err) {
       console.error(err);
       alert("Failed to update quantity");
@@ -55,13 +52,11 @@ const Cart = () => {
   const removeItem = async (productId, variantColor) => {
     if (isUpdating) return;
     setIsUpdating(true);
-
     try {
       await cartService.removeFromCart({ productId, variantColor });
-
       const { data } = await cartService.getCart();
       setCartItems(data.cart?.items || []);
-      fetchCartCount(); // refresh cart count after remove
+      fetchCartCount();
     } catch (err) {
       console.error(err);
       alert("Failed to remove item");
@@ -88,7 +83,6 @@ const Cart = () => {
         <p>Loading your cart...</p>
       </div>
     );
-
   if (error)
     return (
       <div className={styles.errorContainer}>
@@ -107,7 +101,7 @@ const Cart = () => {
     return (
       <div className={styles.emptyCart}>
         <div className={styles.emptyCartIllustration}>
-          {/* Your SVG illustration */}
+          {/* SVG icon */}
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -115,27 +109,7 @@ const Cart = () => {
             width="100"
             height="100"
           >
-            <path
-              d="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6Z"
-              stroke="#4B5563"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M3 6H21"
-              stroke="#4B5563"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10"
-              stroke="#4B5563"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            <path d="M6 2L3 6V20..." stroke="#4B5563" strokeWidth="2" />
           </svg>
         </div>
         <h2>Your Cart is Empty</h2>
@@ -167,7 +141,6 @@ const Cart = () => {
                 (v) => v.color === variantColor
               );
               if (!variant) return null;
-
               const mainImage = Object.values(variant.images)[0];
 
               return (
@@ -243,29 +216,29 @@ const Cart = () => {
                         className={styles.removeButton}
                         disabled={isUpdating}
                       >
-                        <svg
-                          width="18"
-                          height="18"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
+                        <svg width="18" height="18" viewBox="0 0 24 24">
                           <path
                             d="M18 6L6 18"
                             stroke="currentColor"
                             strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
                           />
                           <path
                             d="M6 6L18 18"
                             stroke="currentColor"
                             strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
                           />
-                        </svg>
+                        </svg>{" "}
                         Remove
+                      </button>
+
+                      <button
+                        className={styles.writeReviewButton}
+                        onClick={() => {
+                          setSelectedProduct(product);
+                          setShowReview(true);
+                        }}
+                      >
+                        Write a Review
                       </button>
                     </div>
                   </div>
@@ -277,7 +250,6 @@ const Cart = () => {
           <div className={styles.cartSummary}>
             <div className={styles.summaryCard}>
               <h2 className={styles.summaryTitle}>Order Summary</h2>
-
               <div className={styles.summaryDetails}>
                 <div className={styles.summaryRow}>
                   <span>Subtotal</span>
@@ -291,9 +263,7 @@ const Cart = () => {
                   <span>Estimated Tax</span>
                   <span>${(calculateTotal() * 0.08).toFixed(2)}</span>
                 </div>
-
                 <div className={styles.summaryDivider}></div>
-
                 <div className={`${styles.summaryRow} ${styles.totalRow}`}>
                   <span>Total</span>
                   <span className={styles.totalPrice}>
@@ -315,36 +285,18 @@ const Cart = () => {
               </button>
 
               <div className={styles.paymentOptions}>
-                <div className={styles.paymentIcon}>{/* Visa SVG icon */}</div>
-                <div className={styles.paymentIcon}>
-                  {/* Mastercard SVG icon */}
-                </div>
-                <div className={styles.paymentIcon}>
-                  {/* PayPal SVG icon */}
-                </div>
+                <div className={styles.paymentIcon}>{/* Visa */}</div>
+                <div className={styles.paymentIcon}>{/* Mastercard */}</div>
+                <div className={styles.paymentIcon}>{/* PayPal */}</div>
               </div>
 
               <Link to="/" className={styles.continueShopping}>
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M19 12H5"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                <svg width="16" height="16" viewBox="0 0 24 24">
+                  <path d="M19 12H5" stroke="currentColor" strokeWidth="2" />
                   <path
                     d="M12 19L5 12L12 5"
                     stroke="currentColor"
                     strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
                   />
                 </svg>
                 Continue Shopping
@@ -353,6 +305,17 @@ const Cart = () => {
           </div>
         </div>
       </div>
+
+      {/* Review Popup */}
+      {showReview && selectedProduct && (
+        <ReviewPopup
+          product={selectedProduct}
+          onClose={() => {
+            setShowReview(false);
+            setSelectedProduct(null);
+          }}
+        />
+      )}
     </>
   );
 };
