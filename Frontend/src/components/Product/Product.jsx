@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { productService } from "../../Service/productService";
 import { cartService } from "../../Service/cartService";
-import { useCart } from "../../components/context/cartContext"; 
+import { useCart } from "../../components/context/cartContext";
 import styles from "./Product.module.css";
+import { toast } from "react-toastify";
 
 const Product = () => {
   const [products, setProducts] = useState([]);
@@ -10,7 +11,7 @@ const Product = () => {
   const [error, setError] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState({});
 
-  const { fetchCartCount } = useCart(); // ✅ Access fetchCartCount from context
+  const { fetchCartCount } = useCart();
 
   useEffect(() => {
     productService
@@ -28,7 +29,6 @@ const Product = () => {
         setCurrentImageIndex(initialImageState);
       })
       .catch((err) => {
-        console.error("Error fetching data:", err);
         setError("Failed to load products");
         setLoading(false);
       });
@@ -65,11 +65,10 @@ const Product = () => {
         quantity: 1,
       };
       await cartService.addToCart(payload);
-      await fetchCartCount(); // ✅ Update cart count in Navbar
-      alert(`${product.name} (${variant.color}) added to cart!`);
+      await fetchCartCount();
+      toast.success(`${product.name} (${variant.color}) added to cart!`);
     } catch (err) {
-      console.error("Failed to add to cart:", err.message || err);
-      alert(err.message || "Failed to add item to cart");
+      toast.error(err.message || "Failed to add item to cart");
     }
   };
 
