@@ -98,23 +98,46 @@ export const createProduct = async (req, res) => {
     });
   }
 };
+
 export async function deleteProduct(req, res) {
   try {
-    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+    const product = await Product.findById(req.params.id);
 
-    if (!deletedProduct) {
-      return res.status(400).json({
+    if (!product) {
+      return res.status(404).json({
         status: false,
         message: "No product found with this ID",
       });
     }
 
+    // Delete variant images
+    product.variants.forEach((variant) => {
+      ["front", "side", "back"].forEach((view) => {
+        const imagePath = path.join(
+          "uploads", // Update if your image directory is different
+          variant.images[view]
+        );
+
+        if (fs.existsSync(imagePath)) {
+          fs.unlink(imagePath, (err) => {
+            if (err) {
+              console.error(`Failed to delete ${view} image:`, err);
+            }
+          });
+        }
+      });
+    });
+
+    // Now delete product document
+    const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+
     res.status(200).json({
       status: true,
-      message: "Product deleted successfully",
-      deletedProduct, // optional: useful for frontend
+      message: "Product and associated images deleted successfully",
+      deletedProduct,
     });
   } catch (error) {
+    console.error("Delete Product Error:", error);
     res.status(500).json({
       status: false,
       message: error.message || "Internal server error",
@@ -138,3 +161,110 @@ export async function getAllProduct(req, res, next) {
     });
   }
 }
+
+export const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, description, basePrice, category } = req.body;
+
+    // Find existing product
+    const existingProduct = await Product.findById(id);
+    if (!existingProduct) {
+      return res.status(404).json({
+        status: false,
+        message: "Product not found",
+      });
+    }
+
+    // Update basic fields if provided
+    if (name) existingProduct.name = name;
+    if (description) existingProduct.description = description;
+    if (basePrice) existingProduct.basePrice = parseFloat(basePrice);
+    if (category) existingProduct.category = category;
+
+    // Update variants if new ones are provided
+    const variants = [];
+    let index = 0;
+    let hasVariant = false;
+
+    while (true) {
+      const frontFiles = req.files?.[`variant${index}_front`] || [];
+      const sideFiles = req.files?.[`variant${index}_side`] || [];
+      const backFiles = req.files?.[`variant${index}_back`] || [];
+      const color = req.body[`variant${index}_color`];
+
+      if (
+        frontFiles.length === 0 &&
+        sideFiles.length === 0 &&
+        backFiles.length === 0 &&
+        !color
+      ) {
+        break;
+      }
+
+      if (
+        frontFiles.length === 0 ||
+        sideFiles.length === 0 ||
+        backFiles.length === 0
+      ) {
+        return res.status(400).json({
+          status: false,
+          message: `Variant ${index} must have all three images (front, side, back)`,
+        });
+      }
+
+      if (!color) {
+        return res.status(400).json({
+          status: false,
+          message: `Variant ${index} is missing color`,
+        });
+      }
+
+      variants.push({
+        color,
+        images: {
+          front: frontFiles[0].filename,
+          side: sideFiles[0].filename,
+          back: backFiles[0].filename,
+        },
+        stock: parseInt(req.body[`variant${index}_stock`] || "0"),
+        price: parseFloat(req.body[`variant${index}_price`] || basePrice),
+      });
+
+      hasVariant = true;
+      index++;
+    }
+
+    if (hasVariant) {
+      // Delete old images before replacing variants
+      for (const variant of existingProduct.variants) {
+        for (const key of ["front", "side", "back"]) {
+          const filePath = path.join("uploads", variant.images[key]);
+          if (fs.existsSync(filePath)) {
+            try {
+              fs.unlinkSync(filePath);
+            } catch (err) {
+              console.error(`Failed to delete image ${filePath}:`, err);
+            }
+          }
+        }
+      }
+
+      existingProduct.variants = variants;
+    }
+
+    const updatedProduct = await existingProduct.save();
+
+    res.status(200).json({
+      status: true,
+      message: "Product updated successfully",
+      product: updatedProduct,
+    });
+  } catch (error) {
+    console.error("Update Product Error:", error);
+    res.status(500).json({
+      status: false,
+      message: "Internal server error",
+    });
+  }
+};
