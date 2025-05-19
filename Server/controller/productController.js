@@ -1,8 +1,50 @@
 import Product from "../model/product.js"; // Ensure this path is correct
+import path from "path";
+import fs from "fs";
+import sharp from "sharp";
 
+import multer from "multer";
 /**
  * Create a new product with color variants
  */
+
+const uploadDir = path.join("uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+export async function productImageResize(req, res, next) {
+  if (!req.files) return next();
+
+  try {
+    for (const fieldName in req.files) {
+      for (const file of req.files[fieldName]) {
+        const userId = req.user?.id || "unknown";
+        const filename = `${fieldName}-${userId}-${Date.now()}.jpeg`;
+
+        await sharp(file.buffer)
+          .resize(1600, 800, {
+            fit: "cover", // Crop center to make it square
+            position: "center",
+          })
+          .toFormat("jpeg")
+          .jpeg({
+            quality: 90,
+            progressive: true,
+            chromaSubsampling: "4:4:4",
+          })
+          .toFile(path.join(uploadDir, filename));
+
+        file.filename = filename; // Attach processed filename for later use
+      }
+    }
+
+    next();
+  } catch (err) {
+    console.error("Image processing error:", err);
+    next(err);
+  }
+}
 
 export const createProduct = async (req, res) => {
   try {
