@@ -56,6 +56,7 @@ export const getProductReviews = async (req, res) => {
   try {
     const reviews = await Review.find({ productId: req.params.productId })
       // .populate("userId", "name avatar")
+      console.log(reviews)
       .populate({
         path: "userId",
         select: "name userImage",
@@ -85,7 +86,7 @@ export const getTestimonials = async (req, res) => {
       .populate("userId", "name userImage")
       .sort({ createdAt: -1 })
       .limit(3);
-
+console.log(testimonials)
     res.json({
       success: true,
       data: testimonials,
