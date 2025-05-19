@@ -14,6 +14,6 @@ reviewRouter.route("/").post(Protect, createReview);
 reviewRouter.route("/testimonials").get(getTestimonials);
 
 reviewRouter.route("/products/:productId/reviews").get(getProductReviews);
-reviewRouter.route("/:reviewId").delete(Protect, deleteReview);
+reviewRouter.route("/:reviewId").delete( Protect,deleteReview);
 
 export default reviewRouter;
