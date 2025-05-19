@@ -134,3 +134,25 @@ export async function updateCartQuantity(req, res) {
     res.status(500).json({ message: "Internal server error" });
   }
 }
+export async function removeCartItemById(req, res) {
+  try {
+    const userId = req.user.id;
+    const itemId = req.params.itemId;
+
+    const cart = await Cart.findOne({ user: userId });
+    if (!cart) return res.status(404).json({ message: "Cart not found" });
+
+    const initialLength = cart.items.length;
+    cart.items = cart.items.filter(item => item._id.toString() !== itemId);
+
+    if (cart.items.length === initialLength) {
+      return res.status(404).json({ message: "Cart item not found" });
+    }
+
+    await cart.save();
+    res.status(200).json({ message: "Item removed", cart });
+  } catch (err) {
+    console.error("Remove cart item by ID error:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
