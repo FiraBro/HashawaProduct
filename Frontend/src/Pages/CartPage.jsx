@@ -13,23 +13,24 @@ const Cart = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const { fetchCartCount } = useCart();
 
-  const [showReview, setShowReview] = useState(false); // Added
-  const [selectedProduct, setSelectedProduct] = useState(null); // Added
+  const [showReview, setShowReview] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  console.log(cartItems);
+
+  const fetchCart = async () => {
+    try {
+      const { data } = await cartService.getCart();
+      setCartItems(data.cart?.items || []);
+      setLoading(false);
+      fetchCartCount(); // ✅ ensure this is also defined
+    } catch (err) {
+      setError("Failed to load cart");
+      setLoading(false);
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const { data } = await cartService.getCart();
-        setCartItems(data.cart?.items || []);
-        setLoading(false);
-        fetchCartCount();
-      } catch (err) {
-        setError("Failed to load cart");
-        setLoading(false);
-        console.error(err);
-      }
-    };
-
     fetchCart();
   }, [fetchCartCount]);
 
@@ -44,6 +45,21 @@ const Cart = () => {
     } catch (err) {
       console.error(err);
       alert("Failed to update quantity");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const removeCartItemById = async (itemId) => {
+    console.log(itemId);
+    if (isUpdating) return;
+    setIsUpdating(true);
+    try {
+      await cartService.removeCartItemById(itemId); // this hits /api/cart/item/:itemId
+      await fetchCart();
+      fetchCartCount();
+    } catch (err) {
+      console.error("Error removing orphaned item:", err);
     } finally {
       setIsUpdating(false);
     }
@@ -68,7 +84,7 @@ const Cart = () => {
   const calculateTotal = () => {
     return cartItems
       .reduce((total, item) => {
-        const variant = item.product.variants.find(
+        const variant = item.product?.variants?.find(
           (v) => v.color === item.variantColor
         );
         return variant ? total + variant.price * item.quantity : total;
@@ -83,6 +99,7 @@ const Cart = () => {
         <p>Loading your cart...</p>
       </div>
     );
+
   if (error)
     return (
       <div className={styles.errorContainer}>
@@ -101,7 +118,6 @@ const Cart = () => {
     return (
       <div className={styles.emptyCart}>
         <div className={styles.emptyCartIllustration}>
-          {/* SVG icon */}
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -137,10 +153,31 @@ const Cart = () => {
           <div className={styles.cartItems}>
             {cartItems.map((item, index) => {
               const { product, variantColor, quantity } = item;
+              if (!product || !Array.isArray(product.variants)) {
+                return (
+                  <div key={item._id} className={styles.cartItem}>
+                    <p className={styles.removedProductNotice}>
+                      This product is no longer available.
+                    </p>
+                    <button
+                      onClick={() => {
+                        console.log(item._id);
+                        removeCartItemById(item._id);
+                      }}
+                      className={styles.removeButton}
+                      disabled={isUpdating}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                );
+              }
+
               const variant = product.variants.find(
                 (v) => v.color === variantColor
               );
               if (!variant) return null;
+
               const mainImage = Object.values(variant.images)[0];
 
               return (
@@ -306,7 +343,6 @@ const Cart = () => {
         </div>
       </div>
 
-      {/* Review Popup */}
       {showReview && selectedProduct && (
         <ReviewPopup
           product={selectedProduct}
