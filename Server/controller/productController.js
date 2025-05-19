@@ -23,7 +23,7 @@ export async function productImageResize(req, res, next) {
         const filename = `${fieldName}-${userId}-${Date.now()}.jpeg`;
 
         await sharp(file.buffer)
-          .resize(1600, 800, {
+          .resize(1600, 900, {
             fit: "cover", // Crop center to make it square
             position: "center",
           })
