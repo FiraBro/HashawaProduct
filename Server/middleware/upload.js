@@ -1,17 +1,9 @@
 import multer from "multer";
 
-// Storage config
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // specify folder for uploads
-  },
-  filename: (req, file, cb) => {
-    const uniqueName = `${Date.now()}-${file.originalname}`; // unique file names
-    cb(null, uniqueName);
-  },
-});
+// Use memory storage for processing with Sharp
+const storage = multer.memoryStorage();
 
-// File type validation (only images allowed)
+// File filter for image validation
 const fileFilter = (req, file, cb) => {
   if (!file.mimetype.startsWith("image/")) {
     return cb(new Error("Only image files are allowed!"), false);
@@ -20,7 +12,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 // Multer upload configuration
- export const upload = multer({
+export const upload = multer({
   storage,
   fileFilter,
 }).fields([
@@ -32,4 +24,3 @@ const fileFilter = (req, file, cb) => {
   { name: "variant1_side" },
   { name: "variant1_back" },
 ]);
-
