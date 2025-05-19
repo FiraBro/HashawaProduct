@@ -36,6 +36,7 @@ export const cartService = {
       const response = await axios.get(`${API_URL}/get`, {
         headers: authService.authHeader(),
       });
+      console.log(response)
       return response;
     } catch (error) {
       throw error.response?.data || { message: "Failed to fetch cart" };
@@ -53,5 +54,8 @@ export const cartService = {
     } catch (error) {
       throw error.response?.data || { message: "Failed to update quantity" };
     }
+  },
+  removeCartItemById: (itemId) => {
+    return axios.delete(`${API_URL}/item/${itemId}`,{headers:authService.authHeader()});
   },
 };
