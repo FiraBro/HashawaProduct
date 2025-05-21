@@ -5,6 +5,8 @@ import multer from "multer";
 import sharp from "sharp";
 import path from "path";
 import fs from "fs";
+import crypto from "crypto";
+import Email from "../service/emailService.js";
 
 // Multer config
 const multerStorage = multer.memoryStorage();
@@ -188,6 +190,75 @@ export async function Protect(req, res, next) {
     next();
   } catch (err) {
     return res.status(403).json({ message: "Invalid or expired token" });
+  }
+}
+
+// FORGOT PASSWORD
+
+export async function forgotPassword(req, res, next) {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found with this email." });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetTokenHash = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+
+    user.passwordResetToken = resetTokenHash;
+    user.passwordResetExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+    await user.save({ validateBeforeSave: false });
+
+    const resetURL = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+
+    await new Email(user, resetURL).sendPasswordReset();
+
+    res.status(200).json({
+      status: "success",
+      message: "Token sent to email!",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+// RESET PASSWORD
+
+export async function resetPassword(req, res, next) {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    const user = await User.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Token is invalid or expired" });
+    }
+
+    user.password = password;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
+
+    await new Email(user).sendPasswordChangeNotification();
+
+    res
+      .status(200)
+      .json({ status: "success", message: "Password has been reset" });
+  } catch (error) {
+    next(error);
   }
 }
 
