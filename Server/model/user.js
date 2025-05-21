@@ -19,11 +19,11 @@ const userSchema = new mongoose.Schema({
 
   userImage: {
     type: String,
-    default:'default.jpg'
+    default: "default.jpg",
   },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
 });
-
-
 
 // Hash the password before saving
 userSchema.pre("save", async function (next) {
