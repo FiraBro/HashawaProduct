@@ -1,8 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Hero.module.css";
 import { FiArrowRight } from "react-icons/fi";
+import { cartService } from "../../Service/cartService"; // Adjust the import path as needed
 
 const Hero = () => {
+  const [heroImage, setHeroImage] = useState("/shoe.jpg"); // Default image
+
+  useEffect(() => {
+    const fetchCartImage = async () => {
+      try {
+        const response = await cartService.getCart();
+        console.log(response);
+        if (response.data?.items?.length > 0) {
+          // Use the first item's image from cart
+          const firstCartItem = response.data.items[0];
+          if (firstCartItem.image) {
+            setHeroImage(firstCartItem.image);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch cart:", error);
+        // Keep default image if there's an error
+      }
+    };
+
+    fetchCartImage();
+  }, []);
+
   return (
     <section className={styles.hero}>
       <div className={styles.heroContent}>
@@ -25,7 +49,7 @@ const Hero = () => {
 
         <div className={styles.imageContainer}>
           <img
-            src="/shoe.jpg"
+            src={heroImage}
             alt="Premium running shoe"
             className={styles.heroImage}
           />

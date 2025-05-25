@@ -6,7 +6,7 @@ export default function LoadingScreen() {
     <div className={styles.overlay}>
       <div className={styles.loaderWrapper}>
         <div className={styles.spinner}></div>
-        <h1 className={styles.brandText}>AbdiHope</h1>
+        <h1 className={styles.brandText}>YoyoBrand</h1>
       </div>
     </div>
   );

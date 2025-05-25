@@ -33,14 +33,14 @@ const Navbar = () => {
     <>
       <header className={styles.header}>
         <div className={styles.announcementBar}>
-          <p>Free shipping on orders over $50 | 30-day return policy</p>
+          <p>Free shipping on orders over 2000 Birr | 5-day return policy</p>
         </div>
 
         <div className={styles.mainNav}>
           <div className={styles.container}>
             <a href="/" className={styles.logo}>
-              <span className={styles.logoPrimary}>ABDI</span>
-              <span className={styles.logoSecondary}>HOPE</span>
+              <span className={styles.logoPrimary}>Yoyo</span>
+              <span className={styles.logoSecondary}>Brand</span>
             </a>
 
             <nav

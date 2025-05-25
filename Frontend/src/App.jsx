@@ -6,9 +6,13 @@ import Cart from "./Pages/CartPage";
 import TrackOrder from "./Pages/TrackOrderPage";
 import LoadingScreen from "./components/Loading/LoadingScreen";
 import { ToastContainer } from "react-toastify";
+import ForgotPassword from "./components/Password/ForgotPassword";
+import ResetPasswordPage from "./components/Password/ResetPassword";
 
 const router = createBrowserRouter([
   { path: "/", element: <HomePage /> },
+  {path:'/forgot-password', element:<ForgotPassword />},
+  {path:'/reset-password/:token',element:<ResetPasswordPage />},
   { path: "/login", element: <AuthForm /> },
   { path: "/cart", element: <Cart /> },
   { path: "/track", element: <TrackOrder /> },

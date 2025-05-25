@@ -1,16 +1,30 @@
-const passwordService = {
+import axios from "axios";
+
+// Use environment variables for URLs
+const API_BASE_URL =
+  import.meta.env.VITE_AUTH_API_URL || "http://localhost:3000/api/v3/user";
+
+const API = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+export const passwordService = {
   forgotPassword: async (email) => {
     try {
-      const { data } = await API.post("/auth/forgot-password", { email });
+      const { data } = await API.post("/forgot-password", { email });
+      console.log(data);
+
       return data.message;
     } catch (error) {
-      return handleError(error);
+      return error;
     }
   },
 
   resetPassword: async (token, newPassword, confirmPassword) => {
     try {
-      const { data } = await API.patch(`/auth/reset-password/${token}`, {
+      const { data } = await API.patch(`/reset-password/${token}`, {
         password: newPassword,
         passwordConfirm: confirmPassword,
       });
@@ -21,7 +35,7 @@ const passwordService = {
       }
       return data;
     } catch (error) {
-      return handleError(error);
+      return error;
     }
   },
 };
