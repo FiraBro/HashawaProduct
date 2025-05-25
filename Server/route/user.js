@@ -12,5 +12,5 @@ userRoute.post("/register", authLimiter, register);
 userRoute.post("/login", authLimiter, login);
 
 userRoute.post("/forgot-password", forgotPassword);
-userRoute.post("/reset-password/:token", resetPassword);
+userRoute.patch("/reset-password/:token", resetPassword);
 export default userRoute;

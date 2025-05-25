@@ -29,14 +29,14 @@ app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 // Connect to MongoDB
 mongoose
-.connect(process.env.MONGODB_URI)
-.then(() => console.log("✅ MongoDB connected"))
-.catch((err) => {
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => {
     console.error("❌ MongoDB connection error:", err);
     process.exit(1);
   });
-  
-  // Mount API routes
+
+// Mount API routes
 app.use("/api/v3/user", userRoute);
 app.use("/api/v3/product", productRoute);
 app.use("/api/v3/cart", cartRouter);

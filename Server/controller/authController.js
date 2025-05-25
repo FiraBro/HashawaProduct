@@ -234,7 +234,7 @@ export async function forgotPassword(req, res, next) {
 export async function resetPassword(req, res, next) {
   try {
     const { token } = req.params;
-    const { password } = req.body;
+    const { password, passwordConfirm } = req.body;
 
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
@@ -242,12 +242,13 @@ export async function resetPassword(req, res, next) {
       passwordResetToken: hashedToken,
       passwordResetExpires: { $gt: Date.now() },
     });
-
+    console.log(user);
     if (!user) {
       return res.status(400).json({ message: "Token is invalid or expired" });
     }
 
     user.password = password;
+    user.passwordConfirm = passwordConfirm;
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save();
