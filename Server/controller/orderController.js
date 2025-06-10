@@ -1,4 +1,4 @@
-import Order from "../model/Order.js";
+import Order from "../model/order.js";
 import Cart from "../model/cart.js";
 
 // 📦 Place order from cart
